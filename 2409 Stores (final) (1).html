@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-900">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2409 Uniform Portal</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        raf: {
+                            900: '#0B192C',
+                            800: '#1E3E62',
+                            700: '#2A52BE',
+                            600: '#3B82F6',
+                            gold: '#D4AF37',
+                            'gold-hover': '#B59328',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0B192C; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1E3E62; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
+    </style>
+</head>
+<body class="h-full text-slate-100 flex flex-col custom-scrollbar selection:bg-raf-gold selection:text-raf-900">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-raf-900 border-b border-slate-700 shadow-xl sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Squadron Logo & Branding -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('cadet')">
+                    <img src="https://lh3.googleusercontent.com/gps-cs-s/ANWiy9QAuCtUgc1yn_0YxqyrXJQ0VceVXb1qRFtMT0zWa9SYEoo8s9u1Dwne4od-c3lzQumEaQGJPB5jT434qeysXRMDl3ngxRyoLABWKeVWFwz-NceCdOb5pAlaNcJ_68rSb54vmPWMcYPjgaP0=s1360-w1360-h1020-rw" alt="Squadron logo" class="w-12 h-12 rounded-full object-cover shadow-lg border-2 border-raf-gold/40">
+
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs font-semibold tracking-widest text-raf-gold uppercase">2409 Halton</span>
+                            <span class="text-[10px] bg-raf-800 text-slate-300 px-2 py-0.5 rounded border border-slate-600">Sgt Grant</span>
+                        </div>
+                        <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                            Uniform Stores Portal
+                        </h1>
+                    </div>
+                </div>
+
+                <!-- Interface Navigation Switcher -->
+                <nav class="flex items-center bg-slate-800/90 p-1.5 rounded-xl border border-slate-700">
+                    <button id="nav-cadet-btn" onclick="switchTab('cadet')" class="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-raf-gold text-raf-900 shadow">
+                        <i class="fa-solid fa-user-graduate"></i>
+                        <span>Cadet Reservation</span>
+                    </button>
+                    <button id="nav-admin-btn" onclick="switchTab('admin')" class="hidden flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 transition-all duration-200">
+                        <i class="fa-solid fa-user-shield"></i>
+                        <span>Stores IC</span>
+                        <span id="admin-badge" class="hidden bg-emerald-500 text-slate-950 text-[10px] px-1.5 py-0.5 rounded-full font-bold">UNLOCKED</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- ========================================== -->
+        <!-- CADET RESERVATION PORTAL                   -->
+        <!-- ========================================== -->
+        <section id="cadet-portal" class="space-y-8">
+            <!-- Hero / Intro Banner -->
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-raf-900 via-raf-800 to-slate-800 p-6 sm:p-8 border border-slate-700 shadow-2xl">
+                <div class="absolute -right-10 -bottom-10 text-slate-700/20 text-9xl pointer-events-none">
+                    <i class="fa-solid fa-shirt"></i>
+                </div>
+                <div class="relative z-10 max-w-2xl">
+                    
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">2409 Halton Stores</h2>
+                    <p class="mt-2 text-slate-300 text-sm sm:text-base leading-relaxed">
+                        Choose what uniform you need, and find Sgt Grant, Cpl Birthwright or Cpl Britton who will issue it to you. 
+                    </p>
+                </div>
+            </div>
+
+            <!-- Form & Selection Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Left Column: Cadet Info & Uniform Filters -->
+                <div class="lg:col-span-7 space-y-6">
+                    <!-- Step 1: Cadet Details -->
+                    <div class="bg-slate-800/80 rounded-2xl p-6 border border-slate-700/80 shadow-lg space-y-4">
+                        <div class="flex items-center space-x-3 pb-3 border-b border-slate-700">
+                            <span class="w-7 h-7 rounded-full bg-raf-gold text-raf-900 font-bold text-sm flex items-center justify-center">1</span>
+                            <h3 class="text-lg font-bold text-white">Cadet Identification</h3>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Rank & Full Name <span class="text-rose-400">*</span></label>
+                                <input type="text" id="cadet-name" placeholder="e.g. Cdt Smith, J." class="w-full bg-slate-900/90 border border-slate-600 rounded-xl px-4 py-2.5 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-raf-gold focus:ring-1 focus:ring-raf-gold text-sm transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Flight / Section <span class="text-rose-400">*</span></label>
+                                <select id="cadet-flight" class="w-full bg-slate-900/90 border border-slate-600 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-raf-gold focus:ring-1 focus:ring-raf-gold text-sm transition">
+                                    <option value="" disabled selected>Select Flight</option>
+                                    <option value="A Flight">A Flight</option>
+                                    <option value="B Flight">B Flight</option>
+                                    <option value="T Flight">T Flight</option>
+                                    <option value="Staff">Staff</option>
+                                    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Item Filter & Options -->
+                    <div class="bg-slate-800/80 rounded-2xl p-6 border border-slate-700/80 shadow-lg space-y-5">
+                        <div class="flex items-center space-x-3 pb-3 border-b border-slate-700">
+                            <span class="w-7 h-7 rounded-full bg-raf-gold text-raf-900 font-bold text-sm flex items-center justify-center">2</span>
+                            <h3 class="text-lg font-bold text-white">Uniform Item Selection</h3>
+                        </div>
+
+                        <!-- Category Selector Buttons -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Uniform Category</label>
+                            <div id="category-pills" class="flex flex-wrap gap-2">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Fit / Gender Selector -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Fit / Gender</label>
+                            <div class="grid grid-cols-3 gap-3">
+                                <button type="button" onclick="setGenderFilter('Male')" id="fit-male-btn" class="fit-btn flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl border border-slate-600 bg-slate-900 text-slate-300 hover:border-raf-gold transition text-sm font-medium">
+                                    <i class="fa-solid fa-mars text-blue-400"></i> Male / Unisex
+                                </button>
+                                <button type="button" onclick="setGenderFilter('Female')" id="fit-female-btn" class="fit-btn flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl border border-slate-600 bg-slate-900 text-slate-300 hover:border-raf-gold transition text-sm font-medium">
+                                    <i class="fa-solid fa-venus text-pink-400"></i> Female
+                                </button>
+                                <button type="button" onclick="setGenderFilter('All')" id="fit-all-btn" class="fit-btn active flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl border border-raf-gold bg-raf-gold/20 text-white transition text-sm font-medium">
+                                    <i class="fa-solid fa-layer-group text-raf-gold"></i> Show All
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Item Select Dropdown -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Select Garment / Equipment <span class="text-rose-400">*</span></label>
+                            <select id="item-selector" onchange="handleItemChange()" class="w-full bg-slate-900/90 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:border-raf-gold focus:ring-1 focus:ring-raf-gold text-sm transition font-medium">
+                                <option value="" disabled selected>-- Select Uniform Item --</option>
+                            </select>
+                        </div>
+
+                        <!-- Size Selector -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Available Size <span class="text-rose-400">*</span></label>
+                            <select id="size-selector" onchange="handleSizeChange()" disabled class="w-full bg-slate-900/90 border border-slate-600 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:border-raf-gold focus:ring-1 focus:ring-raf-gold text-sm transition font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+                                <option value="" disabled selected>First select an item above...</option>
+                            </select>
+                        </div>
+
+                        <!-- Add to Order Button -->
+                        <button id="add-to-order-btn" type="button" onclick="addToOrder()" disabled class="w-full py-3 px-4 rounded-xl font-semibold text-sm border border-raf-gold text-raf-gold bg-raf-gold/10 hover:bg-raf-gold hover:text-raf-900 disabled:border-slate-700 disabled:text-slate-500 disabled:bg-slate-900 disabled:cursor-not-allowed transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-cart-plus"></i>
+                            <span>Add Item to Order</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Column: Live Stock Preview & Order Summary -->
+                <div class="lg:col-span-5 flex flex-col justify-between">
+                    <div class="bg-slate-800/80 rounded-2xl p-6 border border-slate-700/80 shadow-lg space-y-6 sticky top-28">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-700">
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-receipt text-raf-gold"></i> Reservation Summary
+                            </h3>
+                            <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">Free Issue (£0.00)</span>
+                        </div>
+
+                        <!-- Selected Item Preview Card -->
+                        <div id="summary-card" class="bg-slate-900/80 rounded-xl p-5 border border-slate-700 space-y-4">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <span id="summary-category" class="text-xs font-bold uppercase tracking-wider text-raf-gold">Select an Item</span>
+                                    <h4 id="summary-title" class="text-lg font-bold text-white mt-0.5">No Item Selected</h4>
+                                    <p id="summary-gender" class="text-xs text-slate-400">Fit: --</p>
+                                </div>
+                                <div id="stock-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-400 border border-slate-700">
+                                    --
+                                </div>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-800 grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <span class="text-xs text-slate-500 block">Selected Size</span>
+                                    <span id="summary-size" class="font-bold text-slate-200">Not selected</span>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-slate-500 block">Stock Level</span>
+                                    <span id="summary-stock-count" class="font-bold text-slate-200">--</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Order Basket -->
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Items in this Order</span>
+                                <span id="basket-count" class="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-900 text-slate-400 border border-slate-700">0 items</span>
+                            </div>
+                            <ul id="basket-list" class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar"></ul>
+                        </div>
+
+                        <!-- Pickup Notice & Terms -->
+                        <div class="bg-raf-900/60 rounded-xl p-4 border border-raf-800 text-xs text-slate-300 space-y-2">
+                            <div class="flex items-center gap-2 font-semibold text-white">
+                                <i class="fa-solid fa-circle-info text-raf-gold"></i> Stores Policy Notice
+                            </div>
+                            <p>Items ordered are reserved for pickup during standard squadron parade hours. Please return any non-fitting scales of kit to the storekeeper immediately.</p>
+                        </div>
+
+                        <!-- Submit Order Button -->
+                        <button id="reserve-btn" onclick="submitReservation()" disabled class="w-full py-4 px-6 rounded-xl font-bold text-raf-900 bg-raf-gold hover:bg-raf-gold-hover disabled:bg-slate-700 disabled:text-slate-500 disabled:cursor-not-allowed transition duration-200 shadow-xl flex items-center justify-center space-x-2 text-base">
+                            <i class="fa-solid fa-box-archive"></i>
+                            <span>Confirm & Reserve Uniform</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- Stores NCOs                   -->
+        <!-- ========================================== -->
+        <section id="admin-portal" class="hidden space-y-8">
+
+            <!-- Security Gate Lock Screen -->
+            <div id="admin-lock-screen" class="max-w-md mx-auto my-12 bg-slate-800/90 rounded-2xl p-8 border border-slate-700 shadow-2xl text-center space-y-6">
+                <div class="w-16 h-16 rounded-full bg-raf-gold/10 border border-raf-gold/30 text-raf-gold flex items-center justify-center mx-auto text-2xl">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-extrabold text-white">Stores IC Access</h3>
+                    <p class="text-slate-400 text-sm mt-1">Enter PIN code to manage uniform orders and stock levels.</p>
+                </div>
+                <div class="space-y-3">
+                    <input type="password" id="admin-pin-input" placeholder="Enter PIN" class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-center text-xl font-mono tracking-widest text-white focus:outline-none focus:border-raf-gold">
+                    <button onclick="unlockAdmin()" class="w-full py-3 bg-raf-gold hover:bg-raf-gold-hover text-raf-900 font-bold rounded-xl transition shadow-lg">
+                        Unlock Admin Portal
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard Content (Hidden until unlocked) -->
+            <div id="admin-content" class="hidden space-y-8">
+
+                <!-- Admin Dashboard Header Bar -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-800/80 p-6 rounded-2xl border border-slate-700">
+                    <div>
+                        <span class="text-xs font-bold text-raf-gold uppercase tracking-wider">Stores Management Dashboard</span>
+                        <h2 class="text-2xl font-bold text-white">Squadron Inventory & Orders</h2>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button data-full-only onclick="openAddItemModal()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm transition flex items-center gap-2 shadow">
+                            <i class="fa-solid fa-plus"></i> Add New Stock
+                        </button>
+                        <button data-full-only onclick="confirmResetData()" class="px-4 py-2.5 rounded-xl bg-slate-700 hover:bg-rose-900/60 text-slate-300 hover:text-rose-200 font-medium text-sm transition border border-slate-600 flex items-center gap-2">
+                            <i class="fa-solid fa-rotate-left"></i> Reset Defaults
+                        </button>
+                        <button onclick="lockAdmin()" class="px-3 py-2.5 rounded-xl bg-slate-900 text-slate-400 hover:text-white text-sm transition">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Metric Stats Cards -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                    <div class="bg-slate-800/80 p-5 rounded-2xl border border-slate-700/80 shadow">
+                        <div class="flex items-center justify-between text-slate-400 mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider">Total Items in Store</span>
+                            <i class="fa-solid fa-boxes-stacked text-raf-gold text-lg"></i>
+                        </div>
+                        <div id="stat-total-items" class="text-3xl font-extrabold text-white">0</div>
+                    </div>
+                    <div class="bg-slate-800/80 p-5 rounded-2xl border border-slate-700/80 shadow">
+                        <div class="flex items-center justify-between text-slate-400 mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider">Active Reservations</span>
+                            <i class="fa-solid fa-clock text-amber-400 text-lg"></i>
+                        </div>
+                        <div id="stat-active-orders" class="text-3xl font-extrabold text-amber-400">0</div>
+                    </div>
+                    <div class="bg-slate-800/80 p-5 rounded-2xl border border-slate-700/80 shadow">
+                        <div class="flex items-center justify-between text-slate-400 mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider">Fulfilled Orders</span>
+                            <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+                        </div>
+                        <div id="stat-fulfilled-orders" class="text-3xl font-extrabold text-emerald-400">0</div>
+                    </div>
+                    <div class="bg-slate-800/80 p-5 rounded-2xl border border-slate-700/80 shadow">
+                        <div class="flex items-center justify-between text-slate-400 mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider">Low/Out of Stock</span>
+                            <i class="fa-solid fa-triangle-exclamation text-rose-400 text-lg"></i>
+                        </div>
+                        <div id="stat-low-stock" class="text-3xl font-extrabold text-rose-400">0</div>
+                    </div>
+                </div>
+
+                <!-- Admin Tabs: Orders vs Inventory -->
+                <div class="bg-slate-800/80 rounded-2xl border border-slate-700 overflow-hidden shadow-xl">
+                    <div class="flex border-b border-slate-700 bg-slate-900/50 p-2 gap-2">
+                        <button id="tab-orders-btn" onclick="switchAdminTab('orders')" class="flex-1 sm:flex-none px-6 py-2.5 rounded-xl font-bold text-sm transition bg-raf-gold text-raf-900 shadow">
+                            <i class="fa-solid fa-list-check mr-2"></i> Cadet Orders & Reservations
+                        </button>
+                        <button id="tab-inventory-btn" onclick="switchAdminTab('inventory')" class="flex-1 sm:flex-none px-6 py-2.5 rounded-xl font-medium text-sm transition text-slate-400 hover:text-white">
+                            <i class="fa-solid fa-boxes-packing mr-2"></i> Stock Inventory Manager
+                        </button>
+                        <button id="tab-activity-btn" data-full-only style="display:none" onclick="switchAdminTab('activity')" class="flex-1 sm:flex-none px-6 py-2.5 rounded-xl font-medium text-sm transition text-slate-400 hover:text-white">
+                            <i class="fa-solid fa-clock-rotate-left mr-2"></i> Admin Activity Log
+                        </button>
+                    </div>
+
+                    <!-- ORDERS TAB CONTENT -->
+                    <div id="admin-orders-tab" class="p-6 space-y-6">
+                        <!-- Filters & Search Bar -->
+                        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                            <div class="relative w-full md:w-80">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-500 text-sm"></i>
+                                <input type="text" id="order-search" onkeyup="renderOrdersTable()" placeholder="Search cadet, item or Ref ID..." class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-raf-gold">
+                            </div>
+                            <div class="flex items-center space-x-2 w-full md:w-auto">
+                                <span class="text-xs font-semibold text-slate-400 uppercase">Status Filter:</span>
+                                <select id="order-status-filter" onchange="renderOrdersTable()" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-raf-gold">
+                                    <option value="ALL">All Statuses</option>
+                                    <option value="Pending">Pending Pickup</option>
+                                    <option value="Ready">Ready for Issue</option>
+                                    <option value="Fulfilled">Fulfilled / Issued</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Orders Table -->
+                        <div class="overflow-x-auto rounded-xl border border-slate-700/80">
+                            <table class="w-full text-left text-sm text-slate-300">
+                                <thead class="bg-slate-900/90 text-xs text-slate-400 uppercase font-semibold border-b border-slate-700">
+                                    <tr>
+                                        <th class="p-4">Ref Code</th>
+                                        <th class="p-4">Cadet Name & Flight</th>
+                                        <th class="p-4">Requested Uniform</th>
+                                        <th class="p-4">Size & Fit</th>
+                                        <th class="p-4">Date Reserved</th>
+                                        <th class="p-4">Status</th>
+                                        <th class="p-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="orders-table-body" class="divide-y divide-slate-700/50">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- INVENTORY TAB CONTENT -->
+                    <div id="admin-inventory-tab" class="hidden p-6 space-y-6">
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div class="relative w-full sm:w-80">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-500 text-sm"></i>
+                                <input type="text" id="inventory-search" onkeyup="renderInventoryTable()" placeholder="Search garment or category..." class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-raf-gold">
+                            </div>
+                            <span class="text-xs text-slate-400">Click quantity controls to edit stock levels in real-time.</span>
+                        </div>
+
+                        <!-- Inventory Table -->
+                        <div class="overflow-x-auto rounded-xl border border-slate-700/80">
+                            <table class="w-full text-left text-sm text-slate-300">
+                                <thead class="bg-slate-900/90 text-xs text-slate-400 uppercase font-semibold border-b border-slate-700">
+                                    <tr>
+                                        <th class="p-4">Item Garment</th>
+                                        <th class="p-4">Category</th>
+                                        <th class="p-4">Fit / Gender</th>
+                                        <th class="p-4">Size</th>
+                                        <th class="p-4">In Stock Quantity</th>
+                                        <th class="p-4 text-right">Manage</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventory-table-body" class="divide-y divide-slate-700/50">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- ACTIVITY LOG TAB CONTENT (full admin only) -->
+                    <div id="admin-activity-tab" class="hidden p-6 space-y-6">
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-white">Admin Activity Log</h3>
+                                <p class="text-xs text-slate-400">Everything Admin 1 and Admin 2 have done, newest first.</p>
+                            </div>
+                            <select id="activity-admin-filter" onchange="renderActivityLog()" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-raf-gold">
+                                <option value="ALL">All Admins</option>
+                                <option value="Admin 1">Admin 1</option>
+                                <option value="Admin 2">Admin 2</option>
+                            </select>
+                        </div>
+                        <div class="overflow-x-auto rounded-xl border border-slate-700/80">
+                            <table class="w-full text-left text-sm text-slate-300">
+                                <thead class="bg-slate-900/90 text-xs text-slate-400 uppercase font-semibold border-b border-slate-700">
+                                    <tr>
+                                        <th class="p-4">Date & Time</th>
+                                        <th class="p-4">Admin</th>
+                                        <th class="p-4">Action</th>
+                                        <th class="p-4">Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="activity-table-body" class="divide-y divide-slate-700/50">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ORDER SUCCESS CONFIRMATION MODAL -->
+    <div id="success-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
+            <div class="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center mx-auto text-3xl">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            
+            <div class="text-center space-y-2">
+                <h3 class="text-2xl font-bold text-white">Uniform Order Reserved Successfully!</h3>
+                <p class="text-slate-300 text-sm">Your order has been logged with the Squadron Storekeeper.</p>
+            </div>
+
+            <!-- Receipt Card -->
+            <div class="bg-slate-900 rounded-xl p-5 border border-slate-700 text-sm space-y-3 font-mono">
+                <div class="flex justify-between border-b border-slate-800 pb-2">
+                    <span class="text-slate-400">Ref Code:</span>
+                    <span id="modal-ref-code" class="text-raf-gold font-bold">#ATC-0000</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-400">Cadet:</span>
+                    <span id="modal-cadet-name" class="text-white">--</span>
+                </div>
+                <div>
+                    <span class="text-slate-400">Items:</span>
+                    <ul id="modal-items-list" class="mt-2 space-y-1.5"></ul>
+                </div>
+                <div class="flex justify-between border-t border-slate-800 pt-2 text-xs">
+                    <span class="text-slate-400">Cost:</span>
+                    <span class="text-emerald-400 font-bold">FREE ISSUE (£0.00)</span>
+                </div>
+            </div>
+
+            <div class="bg-raf-900/80 p-4 rounded-xl text-xs text-slate-300 border border-raf-800">
+                <p class="font-bold text-white mb-1"><i class="fa-solid fa-location-dot text-raf-gold"></i> Pickup Instructions:</p>
+                <p>Present this reference code to the Stores NCO on duty during standard parade night hours.</p>
+            </div>
+
+            <button onclick="closeSuccessModal()" class="w-full py-3.5 bg-raf-gold hover:bg-raf-gold-hover text-raf-900 font-bold rounded-xl transition shadow-lg">
+                Done / Start Another Order
+            </button>
+        </div>
+    </div>
+
+    <!-- ADD NEW ITEM MODAL -->
+    <div id="add-item-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative">
+            <div class="flex items-center justify-between border-b border-slate-700 pb-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-box-open text-raf-gold"></i> Add New Inventory Item
+                </h3>
+                <button onclick="closeAddItemModal()" class="text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Item Title / Garment Name</label>
+                    <input type="text" id="new-item-title" placeholder="e.g. Wedgewood Short Sleeve Shirt" class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-raf-gold">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Category</label>
+                        <select id="new-item-category" class="w-full bg-slate-900 border border-slate-600 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-raf-gold">
+                            <option value="Working Dress (No. 3)">Working Dress (No. 3)</option>
+                            <option value="Parade Uniform (No. 2)">Parade Uniform (No. 2)</option>
+                            <option value="Headwear">Headwear</option>
+                            <option value="Footwear">Footwear</option>
+                            <option value="Accessories / Insignia">Accessories / Insignia</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Gender / Fit</label>
+                        <select id="new-item-gender" class="w-full bg-slate-900 border border-slate-600 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-raf-gold">
+                            <option value="Unisex">Unisex</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Size Specifier</label>
+                        <input type="text" id="new-item-size" placeholder="e.g. 38 collar or Size 8" class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-raf-gold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Initial Stock Qty</label>
+                        <input type="number" id="new-item-qty" min="0" value="10" class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-raf-gold">
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-3 pt-4 border-t border-slate-700">
+                <button onclick="closeAddItemModal()" class="px-4 py-2.5 rounded-xl text-slate-400 hover:text-white text-sm">Cancel</button>
+                <button onclick="saveNewInventoryItem()" class="px-5 py-2.5 bg-raf-gold hover:bg-raf-gold-hover text-raf-900 font-bold rounded-xl text-sm transition">
+                    Save to Stores
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <script>
+        // Default Air Cadet Uniform Dataset
+        const DEFAULT_INVENTORY = [
+            // Headwear
+            { id: 'inv-1', title: 'Air Cadet Beret & Badge', category: 'Headwear', gender: 'Unisex', size: '54 cm', qty: 6 },
+            { id: 'inv-2', title: 'Air Cadet Beret & Badge', category: 'Headwear', gender: 'Unisex', size: '56 cm', qty: 12 },
+            { id: 'inv-3', title: 'Air Cadet Beret & Badge', category: 'Headwear', gender: 'Unisex', size: '58 cm', qty: 8 },
+            { id: 'inv-4', title: 'Air Cadet Beret & Badge', category: 'Headwear', gender: 'Unisex', size: '60 cm', qty: 2 },
+            
+            // Shirts (No. 3 Wedgewood)
+            { id: 'inv-5', title: 'Wedgewood Blue Short Sleeve Shirt', category: 'Working Dress (No. 3)', gender: 'Male', size: '14.5 collar', qty: 5 },
+            { id: 'inv-6', title: 'Wedgewood Blue Short Sleeve Shirt', category: 'Working Dress (No. 3)', gender: 'Male', size: '15 collar', qty: 9 },
+            { id: 'inv-7', title: 'Wedgewood Blue Short Sleeve Shirt', category: 'Working Dress (No. 3)', gender: 'Male', size: '15.5 collar', qty: 0 },
+            { id: 'inv-8', title: 'Wedgewood Blue Short Sleeve Shirt', category: 'Working Dress (No. 3)', gender: 'Female', size: 'Bust 34', qty: 7 },
+            { id: 'inv-9', title: 'Wedgewood Blue Short Sleeve Shirt', category: 'Working Dress (No. 3)', gender: 'Female', size: 'Bust 36', qty: 4 },
+
+            // Jumpers & Trousers
+            { id: 'inv-10', title: 'RAF Blue Wool Jumper', category: 'Working Dress (No. 3)', gender: 'Unisex', size: '36 inch', qty: 6 },
+            { id: 'inv-11', title: 'RAF Blue Wool Jumper', category: 'Working Dress (No. 3)', gender: 'Unisex', size: '38 inch', qty: 10 },
+            { id: 'inv-12', title: 'RAF Blue Wool Jumper', category: 'Working Dress (No. 3)', gender: 'Unisex', size: '40 inch', qty: 3 },
+            { id: 'inv-13', title: 'No. 2 Parade Trousers', category: 'Parade Uniform (No. 2)', gender: 'Male', size: '30W / 31L', qty: 4 },
+            { id: 'inv-14', title: 'No. 2 Parade Trousers', category: 'Parade Uniform (No. 2)', gender: 'Male', size: '32W / 32L', qty: 8 },
+            { id: 'inv-15', title: 'No. 2 Parade Skirt', category: 'Parade Uniform (No. 2)', gender: 'Female', size: 'Size 10', qty: 5 },
+            { id: 'inv-16', title: 'No. 2 Parade Skirt', category: 'Parade Uniform (No. 2)', gender: 'Female', size: 'Size 12', qty: 3 },
+
+            // Footwear
+            { id: 'inv-17', title: 'Parade Shoes (Leather Black)', category: 'Footwear', gender: 'Unisex', size: 'UK Size 6', qty: 4 },
+            { id: 'inv-18', title: 'Parade Shoes (Leather Black)', category: 'Footwear', gender: 'Unisex', size: 'UK Size 7', qty: 6 },
+            { id: 'inv-19', title: 'Parade Shoes (Leather Black)', category: 'Footwear', gender: 'Unisex', size: 'UK Size 8', qty: 2 },
+            { id: 'inv-20', title: 'Parade Shoes (Leather Black)', category: 'Footwear', gender: 'Unisex', size: 'UK Size 9', qty: 0 },
+
+            // Accessories
+            { id: 'inv-21', title: 'Air Cadet Brassard (Blue)', category: 'Accessories / Insignia', gender: 'Unisex', size: 'Standard', qty: 25 },
+            { id: 'inv-22', title: 'Uniform Tie (RAF Blue)', category: 'Accessories / Insignia', gender: 'Unisex', size: 'Standard', qty: 30 },
+            { id: 'inv-23', title: 'Working Dress Belt', category: 'Accessories / Insignia', gender: 'Unisex', size: 'Medium (30-36")', qty: 12 }
+        ];
+
+        // State Variables
+        let inventory = [];
+        let orders = [];
+        let activeTab = 'cadet';
+        let activeAdminTab = 'orders';
+        let selectedCategory = 'All';
+        let selectedGender = 'All';
+        let adminUnlocked = false;
+        let basket = [];
+        let activityLog = [];
+        let currentAdmin = null;
+
+        // Admin access codes. 9723 = full admin; the other two are restricted
+        // (cannot add new stock or use Reset Defaults, and their actions are logged).
+        const ADMIN_ACCOUNTS = {
+            '9723': { name: 'Full Admin', full: true },
+            '2060': { name: 'Admin 1', full: false },
+            '6908': { name: 'Admin 2', full: false }
+        };
+
+        // Initialize App on DOM Load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStoredData();
+            renderCategoryPills();
+            populateItemDropdown();
+            renderBasket();
+            renderOrdersTable();
+            renderInventoryTable();
+            updateStats();
+            if (location.hash === '#admin') switchTab('admin');
+        });
+
+        // Stores IC page is reached via the #admin URL (nav button is hidden)
+        window.addEventListener('hashchange', () => {
+            switchTab(location.hash === '#admin' ? 'admin' : 'cadet');
+        });
+
+        // Load or Initialize Data
+        function loadStoredData() {
+            const savedInventory = localStorage.getItem('atc_inventory');
+            const savedOrders = localStorage.getItem('atc_orders');
+            const savedActivity = localStorage.getItem('atc_activity');
+            activityLog = savedActivity ? JSON.parse(savedActivity) : [];
+
+            if (savedInventory) {
+                inventory = JSON.parse(savedInventory);
+            } else {
+                inventory = [...DEFAULT_INVENTORY];
+                saveInventory();
+            }
+
+            if (savedOrders) {
+                orders = JSON.parse(savedOrders).map(normalizeOrder);
+            } else {
+                orders = [
+                    {
+                        id: 'ATC-7182',
+                        cadetName: 'Cdt Davies, M.',
+                        flight: 'A Flight',
+                        cadetId: '301982',
+                        items: [
+                            { invId: 'inv-2', title: 'Air Cadet Beret & Badge', category: 'Headwear', gender: 'Unisex', size: '56 cm', qty: 1 }
+                        ],
+                        timestamp: new Date(Date.now() - 3600000 * 24).toLocaleString(),
+                        status: 'Pending'
+                    }
+                ];
+                saveOrders();
+            }
+        }
+
+        // Older orders stored a single item directly on the order object
+        function normalizeOrder(o) {
+            if (Array.isArray(o.items)) return o;
+            const { itemTitle, category, gender, size, invId, ...rest } = o;
+            return { ...rest, items: [{ invId, title: itemTitle, category, gender, size, qty: 1 }] };
+        }
+
+        function saveInventory() {
+            localStorage.setItem('atc_inventory', JSON.stringify(inventory));
+            updateStats();
+        }
+
+        function saveOrders() {
+            localStorage.setItem('atc_orders', JSON.stringify(orders));
+            updateStats();
+        }
+
+        // NAVIGATION TABS
+        function switchTab(tab) {
+            activeTab = tab;
+            const cadetPortal = document.getElementById('cadet-portal');
+            const adminPortal = document.getElementById('admin-portal');
+            const cadetBtn = document.getElementById('nav-cadet-btn');
+            const adminBtn = document.getElementById('nav-admin-btn');
+
+            if (tab === 'cadet') {
+                cadetPortal.classList.remove('hidden');
+                adminPortal.classList.add('hidden');
+
+                cadetBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-raf-gold text-raf-900 shadow";
+                adminBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 transition-all duration-200";
+            } else {
+                cadetPortal.classList.add('hidden');
+                adminPortal.classList.remove('hidden');
+
+                adminBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-raf-gold text-raf-900 shadow";
+                cadetBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 transition-all duration-200";
+            }
+        }
+
+        // CADET PORTAL LOGIC
+        function renderCategoryPills() {
+            const categories = ['All', 'Working Dress (No. 3)', 'Parade Uniform (No. 2)', 'Headwear', 'Footwear', 'Accessories / Insignia'];
+            const container = document.getElementById('category-pills');
+            container.innerHTML = '';
+
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `px-3 py-1.5 rounded-lg text-xs font-semibold transition border ${
+                    selectedCategory === cat
+                        ? 'bg-raf-gold text-raf-900 border-raf-gold shadow'
+                        : 'bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-500'
+                }`;
+                btn.innerText = cat;
+                btn.onclick = () => {
+                    selectedCategory = cat;
+                    renderCategoryPills();
+                    populateItemDropdown();
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function setGenderFilter(gender) {
+            selectedGender = gender;
+            document.querySelectorAll('.fit-btn').forEach(b => {
+                b.classList.remove('active', 'border-raf-gold', 'bg-raf-gold/20', 'text-white');
+                b.classList.add('border-slate-600', 'bg-slate-900', 'text-slate-300');
+            });
+
+            const activeBtn = gender === 'Male' ? 'fit-male-btn' : gender === 'Female' ? 'fit-female-btn' : 'fit-all-btn';
+            const el = document.getElementById(activeBtn);
+            el.classList.add('active', 'border-raf-gold', 'bg-raf-gold/20', 'text-white');
+            el.classList.remove('border-slate-600', 'bg-slate-900', 'text-slate-300');
+
+            populateItemDropdown();
+        }
+
+        function populateItemDropdown() {
+            const itemSelect = document.getElementById('item-selector');
+            itemSelect.innerHTML = '<option value="" disabled selected>-- Select Uniform Item --</option>';
+
+            // Group inventory by garment title
+            const titlesMap = new Map();
+
+            inventory.forEach(item => {
+                const matchCategory = selectedCategory === 'All' || item.category === selectedCategory;
+                const matchGender = selectedGender === 'All' || item.gender === selectedGender || item.gender === 'Unisex';
+
+                if (matchCategory && matchGender) {
+                    if (!titlesMap.has(item.title)) {
+                        titlesMap.set(item.title, { category: item.category, gender: item.gender });
+                    }
+                }
+            });
+
+            titlesMap.forEach((info, title) => {
+                const opt = document.createElement('option');
+                opt.value = title;
+                opt.innerText = `${title} (${info.gender})`;
+                itemSelect.appendChild(opt);
+            });
+
+            // Reset sizes & summary
+            document.getElementById('size-selector').innerHTML = '<option value="" disabled selected>First select an item above...</option>';
+            document.getElementById('size-selector').disabled = true;
+            resetSummary();
+        }
+
+        function handleItemChange() {
+            const selectedTitle = document.getElementById('item-selector').value;
+            const sizeSelect = document.getElementById('size-selector');
+            sizeSelect.innerHTML = '<option value="" disabled selected>Select Available Size</option>';
+            sizeSelect.disabled = false;
+
+            // Find all sizes for this title
+            const availableItems = inventory.filter(i => i.title === selectedTitle && (selectedGender === 'All' || i.gender === selectedGender || i.gender === 'Unisex'));
+
+            availableItems.forEach(item => {
+                const opt = document.createElement('option');
+                opt.value = item.id;
+                opt.innerText = `${item.size} — (${item.qty > 0 ? item.qty + ' in stock' : 'OUT OF STOCK'})`;
+                if (item.qty === 0) opt.classList.add('text-rose-400');
+                sizeSelect.appendChild(opt);
+            });
+
+            handleSizeChange();
+        }
+
+        function handleSizeChange() {
+            const invId = document.getElementById('size-selector').value;
+            const addBtn = document.getElementById('add-to-order-btn');
+
+            if (!invId) {
+                resetSummary();
+                return;
+            }
+
+            const item = inventory.find(i => i.id === invId);
+            if (!item) return;
+
+            document.getElementById('summary-category').innerText = item.category;
+            document.getElementById('summary-title').innerText = item.title;
+            document.getElementById('summary-gender').innerText = `Fit: ${item.gender}`;
+            document.getElementById('summary-size').innerText = item.size;
+            const available = item.qty - basketQty(item.id);
+            document.getElementById('summary-stock-count').innerText = `${item.qty} units available`;
+
+            const badge = document.getElementById('stock-badge');
+            if (item.qty > 3) {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+                badge.innerText = "In Stock";
+                addBtn.disabled = available <= 0;
+            } else if (item.qty > 0) {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30";
+                badge.innerText = "Low Stock";
+                addBtn.disabled = available <= 0;
+            } else {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30";
+                badge.innerText = "Out of Stock";
+                addBtn.disabled = true;
+            }
+        }
+
+        function resetSummary() {
+            document.getElementById('summary-category').innerText = 'Select an Item';
+            document.getElementById('summary-title').innerText = 'No Item Selected';
+            document.getElementById('summary-gender').innerText = 'Fit: --';
+            document.getElementById('summary-size').innerText = 'Not selected';
+            document.getElementById('summary-stock-count').innerText = '--';
+            document.getElementById('stock-badge').className = "px-3 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-400 border border-slate-700";
+            document.getElementById('stock-badge').innerText = '--';
+            document.getElementById('add-to-order-btn').disabled = true;
+        }
+
+        // ORDER BASKET
+        function basketQty(invId) {
+            const line = basket.find(b => b.invId === invId);
+            return line ? line.qty : 0;
+        }
+
+        function addToOrder() {
+            const invId = document.getElementById('size-selector').value;
+            if (!invId) {
+                showToast('Please select a valid uniform item and size.', 'error');
+                return;
+            }
+
+            const item = inventory.find(i => i.id === invId);
+            if (!item || item.qty - basketQty(invId) <= 0) {
+                showToast('No more stock available for this item and size.', 'error');
+                return;
+            }
+
+            const line = basket.find(b => b.invId === invId);
+            if (line) line.qty += 1;
+            else basket.push({ invId, qty: 1 });
+
+            renderBasket();
+            handleSizeChange();
+            showToast(`${item.title} (${item.size}) added to order.`, 'success');
+        }
+
+        function changeBasketQty(invId, delta) {
+            const line = basket.find(b => b.invId === invId);
+            if (!line) return;
+            const item = inventory.find(i => i.id === invId);
+
+            if (delta > 0 && (!item || line.qty >= item.qty)) {
+                showToast('No more stock available for this item and size.', 'error');
+                return;
+            }
+
+            line.qty += delta;
+            if (line.qty <= 0) basket = basket.filter(b => b.invId !== invId);
+            renderBasket();
+            handleSizeChange();
+        }
+
+        function renderBasket() {
+            // Drop lines whose inventory entry has been removed
+            basket = basket.filter(b => inventory.some(i => i.id === b.invId));
+
+            const list = document.getElementById('basket-list');
+            const totalUnits = basket.reduce((acc, b) => acc + b.qty, 0);
+            document.getElementById('basket-count').innerText = `${totalUnits} item${totalUnits === 1 ? '' : 's'}`;
+            document.getElementById('reserve-btn').disabled = basket.length === 0;
+
+            if (basket.length === 0) {
+                list.innerHTML = `<li class="text-xs text-slate-500 text-center py-4 border border-dashed border-slate-700 rounded-xl">No items added yet. Choose an item and size, then click "Add Item to Order".</li>`;
+                return;
+            }
+
+            list.innerHTML = '';
+            basket.forEach(line => {
+                const item = inventory.find(i => i.id === line.invId);
+                const li = document.createElement('li');
+                li.className = "flex items-center justify-between gap-3 bg-slate-900/80 rounded-xl px-3 py-2.5 border border-slate-700";
+                li.innerHTML = `
+                    <div class="min-w-0">
+                        <div class="text-sm font-semibold text-white truncate">${item.title}</div>
+                        <div class="text-xs text-slate-400">${item.size} • ${item.gender}</div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button type="button" onclick="changeBasketQty('${line.invId}', -1)" title="Remove one" class="w-6 h-6 rounded-md bg-slate-700 hover:bg-rose-600 text-white text-xs font-bold transition flex items-center justify-center">${line.qty === 1 ? '<i class="fa-solid fa-trash-can text-[10px]"></i>' : '-'}</button>
+                        <span class="w-6 text-center text-sm font-bold font-mono text-raf-gold">${line.qty}</span>
+                        <button type="button" onclick="changeBasketQty('${line.invId}', 1)" title="Add one" class="w-6 h-6 rounded-md bg-slate-700 hover:bg-emerald-600 text-white text-xs font-bold transition flex items-center justify-center">+</button>
+                    </div>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        function submitReservation() {
+            const cadetName = document.getElementById('cadet-name').value.trim();
+            const cadetFlight = document.getElementById('cadet-flight').value;
+            const cadetId = '';
+
+            if (!cadetName) {
+                showToast('Please enter cadet rank and full name.', 'error');
+                return;
+            }
+            if (!cadetFlight) {
+                showToast('Please select cadet flight.', 'error');
+                return;
+            }
+            if (basket.length === 0) {
+                showToast('Please add at least one uniform item to the order.', 'error');
+                return;
+            }
+
+            // Re-check stock for every line before committing
+            for (const line of basket) {
+                const item = inventory.find(i => i.id === line.invId);
+                if (!item || item.qty < line.qty) {
+                    showToast(`Sorry, ${item ? item.title + ' (' + item.size + ')' : 'an item'} no longer has enough stock.`, 'error');
+                    return;
+                }
+            }
+
+            // Decrement Stock & build order lines
+            const orderItems = basket.map(line => {
+                const item = inventory.find(i => i.id === line.invId);
+                item.qty -= line.qty;
+                return { invId: item.id, title: item.title, category: item.category, gender: item.gender, size: item.size, qty: line.qty };
+            });
+            saveInventory();
+
+            // Create Order
+            const refCode = 'ATC-' + Math.floor(1000 + Math.random() * 9000);
+            const newOrder = {
+                id: refCode,
+                cadetName: cadetName,
+                flight: cadetFlight,
+                cadetId: cadetId || 'N/A',
+                items: orderItems,
+                timestamp: new Date().toLocaleString(),
+                status: 'Pending'
+            };
+
+            orders.unshift(newOrder);
+            saveOrders();
+
+            // Show Confirmation Modal
+            document.getElementById('modal-ref-code').innerText = refCode;
+            document.getElementById('modal-cadet-name').innerText = `${cadetName} (${cadetFlight})`;
+            document.getElementById('modal-items-list').innerHTML = orderItems.map(i => `
+                <li class="flex justify-between gap-3 text-xs">
+                    <span class="text-white">${i.qty} × ${i.title}</span>
+                    <span class="text-slate-400 text-right shrink-0">${i.size} [${i.gender}]</span>
+                </li>
+            `).join('');
+            document.getElementById('success-modal').classList.remove('hidden');
+
+            // Refresh UI
+            basket = [];
+            renderBasket();
+            if (document.getElementById('item-selector').value) handleItemChange();
+            renderOrdersTable();
+            renderInventoryTable();
+            showToast('Uniform order reserved successfully!', 'success');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+            // Reset form fields
+            document.getElementById('item-selector').value = '';
+            document.getElementById('size-selector').value = '';
+            document.getElementById('size-selector').disabled = true;
+            resetSummary();
+        }
+
+        // STORES IC LOGIC
+        function unlockAdmin() {
+            const pin = document.getElementById('admin-pin-input').value.trim();
+            if (Object.prototype.hasOwnProperty.call(ADMIN_ACCOUNTS, pin)) {
+                currentAdmin = ADMIN_ACCOUNTS[pin];
+                adminUnlocked = true;
+                applyAdminPermissions();
+                switchAdminTab('orders');
+                document.getElementById('admin-lock-screen').classList.add('hidden');
+                document.getElementById('admin-content').classList.remove('hidden');
+                document.getElementById('admin-badge').classList.remove('hidden');
+                showToast('Admin portal unlocked successfully.', 'success');
+            } else {
+                showToast('Incorrect Security PIN code.', 'error');
+            }
+        }
+
+        function applyAdminPermissions() {
+            const isFull = !!(currentAdmin && currentAdmin.full);
+            document.querySelectorAll('[data-full-only]').forEach(el => {
+                el.style.display = isFull ? '' : 'none';
+            });
+        }
+
+        function requireFullAdmin() {
+            if (!currentAdmin || !currentAdmin.full) {
+                showToast('Only the full admin can do this.', 'error');
+                return false;
+            }
+            return true;
+        }
+
+        // Record actions made by the two restricted admins
+        function logActivity(action, details) {
+            if (!currentAdmin || currentAdmin.full) return;
+            activityLog.unshift({
+                time: new Date().toLocaleString(),
+                admin: currentAdmin.name,
+                action,
+                details
+            });
+            localStorage.setItem('atc_activity', JSON.stringify(activityLog));
+        }
+
+        function renderActivityLog() {
+            const tbody = document.getElementById('activity-table-body');
+            const filter = document.getElementById('activity-admin-filter').value;
+            const entries = activityLog.filter(e => filter === 'ALL' || e.admin === filter);
+            if (entries.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-slate-500">No admin activity recorded yet.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = entries.map(e => `
+                <tr class="hover:bg-slate-800/40 transition">
+                    <td class="p-4 text-xs text-slate-400 whitespace-nowrap">${e.time}</td>
+                    <td class="p-4 font-bold text-white whitespace-nowrap">${e.admin}</td>
+                    <td class="p-4 text-xs font-semibold text-raf-gold whitespace-nowrap">${e.action}</td>
+                    <td class="p-4 text-slate-300">${e.details}</td>
+                </tr>
+            `).join('');
+        }
+
+        function lockAdmin() {
+            adminUnlocked = false;
+            currentAdmin = null;
+            applyAdminPermissions();
+            switchAdminTab('orders');
+            document.getElementById('admin-pin-input').value = '';
+            document.getElementById('admin-lock-screen').classList.remove('hidden');
+            document.getElementById('admin-content').classList.add('hidden');
+            document.getElementById('admin-badge').classList.add('hidden');
+        }
+
+        function switchAdminTab(tab) {
+            if (tab === 'activity' && !(currentAdmin && currentAdmin.full)) tab = 'orders';
+            activeAdminTab = tab;
+            const tabs = {
+                orders: ['admin-orders-tab', 'tab-orders-btn'],
+                inventory: ['admin-inventory-tab', 'tab-inventory-btn'],
+                activity: ['admin-activity-tab', 'tab-activity-btn']
+            };
+            const activeCls = "flex-1 sm:flex-none px-6 py-2.5 rounded-xl font-bold text-sm transition bg-raf-gold text-raf-900 shadow";
+            const idleCls = "flex-1 sm:flex-none px-6 py-2.5 rounded-xl font-medium text-sm transition text-slate-400 hover:text-white";
+
+            Object.entries(tabs).forEach(([name, [panelId, btnId]]) => {
+                document.getElementById(panelId).classList.toggle('hidden', name !== tab);
+                document.getElementById(btnId).className = name === tab ? activeCls : idleCls;
+            });
+
+            if (tab === 'activity') renderActivityLog();
+        }
+
+        function renderOrdersTable() {
+            const tbody = document.getElementById('orders-table-body');
+            const query = document.getElementById('order-search').value.toLowerCase();
+            const filterStatus = document.getElementById('order-status-filter').value;
+
+            tbody.innerHTML = '';
+
+            const filteredOrders = orders.filter(o => {
+                const matchQuery = o.cadetName.toLowerCase().includes(query) || o.id.toLowerCase().includes(query) || o.items.some(i => i.title.toLowerCase().includes(query));
+                const matchStatus = filterStatus === 'ALL' || o.status === filterStatus;
+                return matchQuery && matchStatus;
+            });
+
+            if (filteredOrders.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-slate-500">No matching cadet reservations found.</td></tr>`;
+                return;
+            }
+
+            filteredOrders.forEach(o => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/40 transition";
+
+                let statusBadge = '';
+                if (o.status === 'Pending') statusBadge = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">Pending Pickup</span>`;
+                else if (o.status === 'Ready') statusBadge = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/30">Ready for Issue</span>`;
+                else if (o.status === 'Fulfilled') statusBadge = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">Fulfilled</span>`;
+                else statusBadge = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/30">Cancelled</span>`;
+
+                tr.innerHTML = `
+                    <td class="p-4 font-mono font-bold text-raf-gold">${o.id}</td>
+                    <td class="p-4">
+                        <div class="font-bold text-white">${o.cadetName}</div>
+                        <div class="text-xs text-slate-400">${o.flight} • ID: ${o.cadetId}</div>
+                    </td>
+                    <td class="p-4 space-y-2">
+                        ${o.items.map(i => `
+                            <div>
+                                <div class="font-medium text-slate-200">${i.qty > 1 ? `<span class="text-raf-gold font-bold">${i.qty} ×</span> ` : ''}${i.title}</div>
+                                <div class="text-xs text-slate-400">${i.category}</div>
+                            </div>
+                        `).join('')}
+                    </td>
+                    <td class="p-4 text-xs font-semibold text-slate-300 space-y-2">
+                        ${o.items.map(i => `
+                            <div class="leading-[2.5rem]">${i.size} <span class="text-slate-500">(${i.gender})</span></div>
+                        `).join('')}
+                    </td>
+                    <td class="p-4 text-xs text-slate-400">${o.timestamp}</td>
+                    <td class="p-4">${statusBadge}</td>
+                    <td class="p-4 text-right space-x-1">
+                        ${o.status !== 'Fulfilled' && o.status !== 'Cancelled' ? `
+                            <button onclick="updateOrderStatus('${o.id}', 'Ready')" title="Mark Ready" class="p-2 rounded-lg bg-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-white transition text-xs"><i class="fa-solid fa-box font-bold"></i> Ready</button>
+                            <button onclick="updateOrderStatus('${o.id}', 'Fulfilled')" title="Issue to Cadet" class="p-2 rounded-lg bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white transition text-xs"><i class="fa-solid fa-check font-bold"></i> Issue</button>
+                            <button onclick="updateOrderStatus('${o.id}', 'Cancelled')" title="Cancel & Return Stock" class="p-2 rounded-lg bg-rose-600/20 text-rose-400 hover:bg-rose-600 hover:text-white transition text-xs"><i class="fa-solid fa-xmark"></i></button>
+                        ` : `<span class="text-xs text-slate-500">Completed</span>`}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function updateOrderStatus(orderId, newStatus) {
+            const order = orders.find(o => o.id === orderId);
+            if (!order) return;
+
+            const previousStatus = order.status;
+
+            // If cancelling, restore stock
+            if (newStatus === 'Cancelled' && order.status !== 'Cancelled') {
+                order.items.forEach(line => {
+                    const invItem = inventory.find(i => i.id === line.invId);
+                    if (invItem) invItem.qty += line.qty;
+                });
+                saveInventory();
+            }
+
+            order.status = newStatus;
+            logActivity('Order status changed', `${orderId} (${order.cadetName}, ${order.flight}): ${previousStatus} → ${newStatus}`);
+            saveOrders();
+            renderOrdersTable();
+            renderInventoryTable();
+            populateItemDropdown();
+            renderBasket();
+            showToast(`Order ${orderId} updated to ${newStatus}.`, 'success');
+        }
+
+        function renderInventoryTable() {
+            const tbody = document.getElementById('inventory-table-body');
+            const query = document.getElementById('inventory-search').value.toLowerCase();
+            tbody.innerHTML = '';
+
+            const filteredInv = inventory.filter(i => i.title.toLowerCase().includes(query) || i.category.toLowerCase().includes(query));
+
+            if (filteredInv.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-500">No uniform entries in stores.</td></tr>`;
+                return;
+            }
+
+            filteredInv.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/40 transition";
+
+                tr.innerHTML = `
+                    <td class="p-4 font-bold text-white">${item.title}</td>
+                    <td class="p-4 text-xs text-slate-300">${item.category}</td>
+                    <td class="p-4 text-xs font-semibold text-slate-400">${item.gender}</td>
+                    <td class="p-4 text-xs font-mono text-raf-gold">${item.size}</td>
+                    <td class="p-4">
+                        <div class="flex items-center space-x-2">
+                            <button onclick="adjustStock('${item.id}', -1)" class="w-7 h-7 rounded-lg bg-slate-700 hover:bg-rose-600 text-white font-bold text-xs transition flex items-center justify-center">-</button>
+                            <span class="w-8 text-center font-bold font-mono ${item.qty === 0 ? 'text-rose-400' : 'text-emerald-400'}">${item.qty}</span>
+                            <button onclick="adjustStock('${item.id}', 1)" class="w-7 h-7 rounded-lg bg-slate-700 hover:bg-emerald-600 text-white font-bold text-xs transition flex items-center justify-center">+</button>
+                        </div>
+                    </td>
+                    <td class="p-4 text-right">
+                        <button onclick="deleteInventoryItem('${item.id}')" class="p-2 text-slate-500 hover:text-rose-400 transition">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function adjustStock(invId, delta) {
+            const item = inventory.find(i => i.id === invId);
+            if (!item) return;
+
+            const oldQty = item.qty;
+            item.qty = Math.max(0, item.qty + delta);
+            if (item.qty !== oldQty) {
+                logActivity('Stock adjusted', `${item.title} (${item.size}, ${item.gender}): ${oldQty} → ${item.qty}`);
+            }
+            saveInventory();
+            renderInventoryTable();
+            populateItemDropdown();
+            renderBasket();
+        }
+
+        function deleteInventoryItem(invId) {
+            if (confirm('Are you sure you want to delete this item scale from inventory?')) {
+                const removed = inventory.find(i => i.id === invId);
+                if (removed) logActivity('Inventory item deleted', `${removed.title} (${removed.size}, ${removed.gender}) with ${removed.qty} in stock`);
+                inventory = inventory.filter(i => i.id !== invId);
+                saveInventory();
+                renderInventoryTable();
+                populateItemDropdown();
+                renderBasket();
+                showToast('Inventory item removed.', 'success');
+            }
+        }
+
+        function openAddItemModal() {
+            if (!requireFullAdmin()) return;
+            document.getElementById('add-item-modal').classList.remove('hidden');
+        }
+
+        function closeAddItemModal() {
+            document.getElementById('add-item-modal').classList.add('hidden');
+        }
+
+        function saveNewInventoryItem() {
+            if (!requireFullAdmin()) return;
+            const title = document.getElementById('new-item-title').value.trim();
+            const category = document.getElementById('new-item-category').value;
+            const gender = document.getElementById('new-item-gender').value;
+            const size = document.getElementById('new-item-size').value.trim();
+            const qty = parseInt(document.getElementById('new-item-qty').value) || 0;
+
+            if (!title || !size) {
+                showToast('Please fill out item name and size.', 'error');
+                return;
+            }
+
+            const newItem = {
+                id: 'inv-' + Date.now(),
+                title,
+                category,
+                gender,
+                size,
+                qty
+            };
+
+            inventory.push(newItem);
+            saveInventory();
+            renderInventoryTable();
+            populateItemDropdown();
+            renderBasket();
+            closeAddItemModal();
+            showToast('New stock item added to stores!', 'success');
+        }
+
+        function confirmResetData() {
+            if (!requireFullAdmin()) return;
+            const pin = prompt('Enter the admin PIN code to confirm reset.\n\nWARNING: This permanently removes ALL uniform entries and ALL current orders.');
+            if (pin === null) return;
+            if (pin !== '9723') {
+                showToast('Incorrect Security PIN code. Reset cancelled.', 'error');
+                return;
+            }
+            if (!confirm('Are you sure? Every uniform entry and order will be deleted and all counts set to 0.')) return;
+
+            inventory = [];
+            orders = [];
+            saveInventory();
+            saveOrders();
+            renderInventoryTable();
+            renderOrdersTable();
+            populateItemDropdown();
+            renderBasket();
+            updateStats();
+            showToast('All uniform entries and orders have been cleared.', 'success');
+        }
+
+        function updateStats() {
+            const totalUnits = inventory.reduce((acc, curr) => acc + curr.qty, 0);
+            const activeOrders = orders.filter(o => o.status === 'Pending' || o.status === 'Ready').length;
+            const fulfilledOrders = orders.filter(o => o.status === 'Fulfilled').length;
+            const lowStockCount = inventory.filter(i => i.qty <= 2).length;
+
+            document.getElementById('stat-total-items').innerText = totalUnits;
+            document.getElementById('stat-active-orders').innerText = activeOrders;
+            document.getElementById('stat-fulfilled-orders').innerText = fulfilledOrders;
+            document.getElementById('stat-low-stock').innerText = lowStockCount;
+        }
+
+        // TOAST NOTIFICATIONS
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const bgColor = type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-rose-600' : 'bg-raf-gold text-raf-900';
+            const icon = type === 'success' ? 'fa-circle-check' : type === 'error' ? 'fa-triangle-exclamation' : 'fa-circle-info';
+
+            toast.className = `pointer-events-auto flex items-center space-x-3 px-4 py-3 rounded-xl shadow-2xl text-white text-sm font-semibold transform transition-all duration-300 translate-y-2 opacity-0 ${bgColor}`;
+            toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
