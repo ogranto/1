@@ -939,7 +939,7 @@
         // STORES IC LOGIC
         function unlockAdmin() {
             const pin = document.getElementById('admin-pin-input').value;
-            if (pin === '9723') {
+            if (pin === '1234') {
                 adminUnlocked = true;
                 document.getElementById('admin-lock-screen').classList.add('hidden');
                 document.getElementById('admin-content').classList.remove('hidden');
@@ -1162,7 +1162,7 @@
         function confirmResetData() {
             const pin = prompt('Enter the admin PIN code to confirm reset.\n\nWARNING: This permanently removes ALL uniform entries and ALL current orders.');
             if (pin === null) return;
-            if (pin !== '9723') {
+            if (pin !== '1234') {
                 showToast('Incorrect Security PIN code. Reset cancelled.', 'error');
                 return;
             }
