@@ -1,0 +1,12 @@
+name = "uniform-portal"
+compatibility_date = "2026-03-01"
+
+[vars]
+PIN_FULL_ADMIN = "9723"
+PIN_ADMIN_1 = "2060"
+PIN_ADMIN_2 = "6908"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "stores-db"
+database_id = "d74959dd-b3a8-4dfa-bb9c-f2660b62a11a"
