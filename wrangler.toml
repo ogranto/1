@@ -1,0 +1,12 @@
+name = "1"
+compatibility_date = "2026-10-13"
+main = "src/index.js"
+
+[assets]
+directory = "."
+binding = "ASSETS"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "stores-db"
+database_id = "d74959dd-b3a8-4dfa-bb9c-f2660b62a11a"
