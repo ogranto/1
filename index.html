@@ -89,7 +89,6 @@
                     <i class="fa-solid fa-shirt"></i>
                 </div>
                 <div class="relative z-10 max-w-2xl">
-                    
                     <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">2409 Halton Stores</h2>
                     <p class="mt-2 text-slate-300 text-sm sm:text-base leading-relaxed">
                         Choose what uniform you need, and find Sgt Grant, Cpl Birthwright or Cpl Britton who will issue it to you. 
@@ -120,7 +119,6 @@
                                     <option value="B Flight">B Flight</option>
                                     <option value="T Flight">T Flight</option>
                                     <option value="Staff">Staff</option>
-                                    
                                 </select>
                             </div>
                         </div>
@@ -136,9 +134,7 @@
                         <!-- Category Selector Buttons -->
                         <div>
                             <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Uniform Category</label>
-                            <div id="category-pills" class="flex flex-wrap gap-2">
-                                <!-- Populated dynamically -->
-                            </div>
+                            <div id="category-pills" class="flex flex-wrap gap-2"></div>
                         </div>
 
                         <!-- Fit / Gender Selector -->
@@ -244,7 +240,7 @@
         </section>
 
         <!-- ========================================== -->
-        <!-- Stores NCOs                   -->
+        <!-- STORES IC MANAGEMENT PORTAL                -->
         <!-- ========================================== -->
         <section id="admin-portal" class="hidden space-y-8">
 
@@ -335,7 +331,6 @@
 
                     <!-- ORDERS TAB CONTENT -->
                     <div id="admin-orders-tab" class="p-6 space-y-6">
-                        <!-- Filters & Search Bar -->
                         <div class="flex flex-col md:flex-row items-center justify-between gap-4">
                             <div class="relative w-full md:w-80">
                                 <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-500 text-sm"></i>
@@ -353,7 +348,6 @@
                             </div>
                         </div>
 
-                        <!-- Orders Table -->
                         <div class="overflow-x-auto rounded-xl border border-slate-700/80">
                             <table class="w-full text-left text-sm text-slate-300">
                                 <thead class="bg-slate-900/90 text-xs text-slate-400 uppercase font-semibold border-b border-slate-700">
@@ -367,9 +361,7 @@
                                         <th class="p-4 text-right">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody id="orders-table-body" class="divide-y divide-slate-700/50">
-                                    <!-- Populated dynamically -->
-                                </tbody>
+                                <tbody id="orders-table-body" class="divide-y divide-slate-700/50"></tbody>
                             </table>
                         </div>
                     </div>
@@ -384,7 +376,6 @@
                             <span class="text-xs text-slate-400">Click quantity controls to edit stock levels in real-time.</span>
                         </div>
 
-                        <!-- Inventory Table -->
                         <div class="overflow-x-auto rounded-xl border border-slate-700/80">
                             <table class="w-full text-left text-sm text-slate-300">
                                 <thead class="bg-slate-900/90 text-xs text-slate-400 uppercase font-semibold border-b border-slate-700">
@@ -397,14 +388,12 @@
                                         <th class="p-4 text-right">Manage</th>
                                     </tr>
                                 </thead>
-                                <tbody id="inventory-table-body" class="divide-y divide-slate-700/50">
-                                    <!-- Populated dynamically -->
-                                </tbody>
+                                <tbody id="inventory-table-body" class="divide-y divide-slate-700/50"></tbody>
                             </table>
                         </div>
                     </div>
 
-                    <!-- ACTIVITY LOG TAB CONTENT (full admin only) -->
+                    <!-- ACTIVITY LOG TAB CONTENT -->
                     <div id="admin-activity-tab" class="hidden p-6 space-y-6">
                         <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div>
@@ -427,17 +416,13 @@
                                         <th class="p-4">Details</th>
                                     </tr>
                                 </thead>
-                                <tbody id="activity-table-body" class="divide-y divide-slate-700/50">
-                                    <!-- Populated dynamically -->
-                                </tbody>
+                                <tbody id="activity-table-body" class="divide-y divide-slate-700/50"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-
             </div>
         </section>
-
     </main>
 
     <!-- ORDER SUCCESS CONFIRMATION MODAL -->
@@ -446,13 +431,10 @@
             <div class="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center mx-auto text-3xl">
                 <i class="fa-solid fa-circle-check"></i>
             </div>
-            
             <div class="text-center space-y-2">
                 <h3 class="text-2xl font-bold text-white">Uniform Order Reserved Successfully!</h3>
                 <p class="text-slate-300 text-sm">Your order has been logged with the Squadron Storekeeper.</p>
             </div>
-
-            <!-- Receipt Card -->
             <div class="bg-slate-900 rounded-xl p-5 border border-slate-700 text-sm space-y-3 font-mono">
                 <div class="flex justify-between border-b border-slate-800 pb-2">
                     <span class="text-slate-400">Ref Code:</span>
@@ -471,12 +453,10 @@
                     <span class="text-emerald-400 font-bold">FREE ISSUE (£0.00)</span>
                 </div>
             </div>
-
             <div class="bg-raf-900/80 p-4 rounded-xl text-xs text-slate-300 border border-raf-800">
                 <p class="font-bold text-white mb-1"><i class="fa-solid fa-location-dot text-raf-gold"></i> Pickup Instructions:</p>
                 <p>Present this reference code to the Stores NCO on duty during standard parade night hours.</p>
             </div>
-
             <button onclick="closeSuccessModal()" class="w-full py-3.5 bg-raf-gold hover:bg-raf-gold-hover text-raf-900 font-bold rounded-xl transition shadow-lg">
                 Done / Start Another Order
             </button>
@@ -494,13 +474,11 @@
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
-
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Item Title / Garment Name</label>
                     <input type="text" id="new-item-title" placeholder="e.g. Wedgewood Short Sleeve Shirt" class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-raf-gold">
                 </div>
-
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Category</label>
@@ -521,7 +499,6 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Size Specifier</label>
@@ -533,7 +510,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="flex justify-end space-x-3 pt-4 border-t border-slate-700">
                 <button onclick="closeAddItemModal()" class="px-4 py-2.5 rounded-xl text-slate-400 hover:text-white text-sm">Cancel</button>
                 <button onclick="saveNewInventoryItem()" class="px-5 py-2.5 bg-raf-gold hover:bg-raf-gold-hover text-raf-900 font-bold rounded-xl text-sm transition">
@@ -545,128 +521,48 @@
 
     <!-- JAVASCRIPT APPLICATION LOGIC -->
     <script>
-        // Default Air Cadet Uniform Dataset
-        const DEFAULT_INVENTORY = [
-            // Headwear
-            { id: 'inv-1', title: 'Air Cadet Beret & Badge', category: 'Headwear', gender: 'Unisex', size: '54 cm', qty: 6 },
-            { id: 'inv-2', title: 'Air Cadet Beret & Badge', category: 'Headwear', gender: 'Unisex', size: '56 cm', qty: 12 },
-            { id: 'inv-3', title: 'Air Cadet Beret & Badge', category: 'Headwear', gender: 'Unisex', size: '58 cm', qty: 8 },
-            { id: 'inv-4', title: 'Air Cadet Beret & Badge', category: 'Headwear', gender: 'Unisex', size: '60 cm', qty: 2 },
-            
-            // Shirts (No. 3 Wedgewood)
-            { id: 'inv-5', title: 'Wedgewood Blue Short Sleeve Shirt', category: 'Working Dress (No. 3)', gender: 'Male', size: '14.5 collar', qty: 5 },
-            { id: 'inv-6', title: 'Wedgewood Blue Short Sleeve Shirt', category: 'Working Dress (No. 3)', gender: 'Male', size: '15 collar', qty: 9 },
-            { id: 'inv-7', title: 'Wedgewood Blue Short Sleeve Shirt', category: 'Working Dress (No. 3)', gender: 'Male', size: '15.5 collar', qty: 0 },
-            { id: 'inv-8', title: 'Wedgewood Blue Short Sleeve Shirt', category: 'Working Dress (No. 3)', gender: 'Female', size: 'Bust 34', qty: 7 },
-            { id: 'inv-9', title: 'Wedgewood Blue Short Sleeve Shirt', category: 'Working Dress (No. 3)', gender: 'Female', size: 'Bust 36', qty: 4 },
-
-            // Jumpers & Trousers
-            { id: 'inv-10', title: 'RAF Blue Wool Jumper', category: 'Working Dress (No. 3)', gender: 'Unisex', size: '36 inch', qty: 6 },
-            { id: 'inv-11', title: 'RAF Blue Wool Jumper', category: 'Working Dress (No. 3)', gender: 'Unisex', size: '38 inch', qty: 10 },
-            { id: 'inv-12', title: 'RAF Blue Wool Jumper', category: 'Working Dress (No. 3)', gender: 'Unisex', size: '40 inch', qty: 3 },
-            { id: 'inv-13', title: 'No. 2 Parade Trousers', category: 'Parade Uniform (No. 2)', gender: 'Male', size: '30W / 31L', qty: 4 },
-            { id: 'inv-14', title: 'No. 2 Parade Trousers', category: 'Parade Uniform (No. 2)', gender: 'Male', size: '32W / 32L', qty: 8 },
-            { id: 'inv-15', title: 'No. 2 Parade Skirt', category: 'Parade Uniform (No. 2)', gender: 'Female', size: 'Size 10', qty: 5 },
-            { id: 'inv-16', title: 'No. 2 Parade Skirt', category: 'Parade Uniform (No. 2)', gender: 'Female', size: 'Size 12', qty: 3 },
-
-            // Footwear
-            { id: 'inv-17', title: 'Parade Shoes (Leather Black)', category: 'Footwear', gender: 'Unisex', size: 'UK Size 6', qty: 4 },
-            { id: 'inv-18', title: 'Parade Shoes (Leather Black)', category: 'Footwear', gender: 'Unisex', size: 'UK Size 7', qty: 6 },
-            { id: 'inv-19', title: 'Parade Shoes (Leather Black)', category: 'Footwear', gender: 'Unisex', size: 'UK Size 8', qty: 2 },
-            { id: 'inv-20', title: 'Parade Shoes (Leather Black)', category: 'Footwear', gender: 'Unisex', size: 'UK Size 9', qty: 0 },
-
-            // Accessories
-            { id: 'inv-21', title: 'Air Cadet Brassard (Blue)', category: 'Accessories / Insignia', gender: 'Unisex', size: 'Standard', qty: 25 },
-            { id: 'inv-22', title: 'Uniform Tie (RAF Blue)', category: 'Accessories / Insignia', gender: 'Unisex', size: 'Standard', qty: 30 },
-            { id: 'inv-23', title: 'Working Dress Belt', category: 'Accessories / Insignia', gender: 'Unisex', size: 'Medium (30-36")', qty: 12 }
-        ];
-
         // State Variables
         let inventory = [];
         let orders = [];
+        let activityLog = [];
         let activeTab = 'cadet';
         let activeAdminTab = 'orders';
         let selectedCategory = 'All';
         let selectedGender = 'All';
         let adminUnlocked = false;
         let basket = [];
-        let activityLog = [];
+        let currentAdminPIN = '';
         let currentAdmin = null;
 
-        // Admin access codes. 9723 = full admin; the other two are restricted
-        // (cannot add new stock or use Reset Defaults, and their actions are logged).
-        const ADMIN_ACCOUNTS = {
-            '9723': { name: 'Full Admin', full: true },
-            '2060': { name: 'Admin 1', full: false },
-            '6908': { name: 'Admin 2', full: false }
-        };
-
         // Initialize App on DOM Load
-        window.addEventListener('DOMContentLoaded', () => {
-            loadStoredData();
+        window.addEventListener('DOMContentLoaded', async () => {
+            await refreshData();
             renderCategoryPills();
             populateItemDropdown();
             renderBasket();
-            renderOrdersTable();
-            renderInventoryTable();
-            updateStats();
             if (location.hash === '#admin') switchTab('admin');
         });
 
-        // Stores IC page is reached via the #admin URL (nav button is hidden)
         window.addEventListener('hashchange', () => {
             switchTab(location.hash === '#admin' ? 'admin' : 'cadet');
         });
 
-        // Load or Initialize Data
-        function loadStoredData() {
-            const savedInventory = localStorage.getItem('atc_inventory');
-            const savedOrders = localStorage.getItem('atc_orders');
-            const savedActivity = localStorage.getItem('atc_activity');
-            activityLog = savedActivity ? JSON.parse(savedActivity) : [];
-
-            if (savedInventory) {
-                inventory = JSON.parse(savedInventory);
-            } else {
-                inventory = [...DEFAULT_INVENTORY];
-                saveInventory();
+        async function refreshData() {
+            try {
+                const [invRes, ordRes, actRes] = await Promise.all([
+                    fetch('/api/inventory'),
+                    fetch('/api/orders'),
+                    fetch('/api/activity')
+                ]);
+                if (invRes.ok) inventory = await invRes.json();
+                if (ordRes.ok) orders = await ordRes.json();
+                if (actRes.ok) activityLog = await actRes.json();
+                updateStats();
+                renderInventoryTable();
+                renderOrdersTable();
+            } catch (err) {
+                console.error("Failed to connect to backend API", err);
             }
-
-            if (savedOrders) {
-                orders = JSON.parse(savedOrders).map(normalizeOrder);
-            } else {
-                orders = [
-                    {
-                        id: 'ATC-7182',
-                        cadetName: 'Cdt Davies, M.',
-                        flight: 'A Flight',
-                        cadetId: '301982',
-                        items: [
-                            { invId: 'inv-2', title: 'Air Cadet Beret & Badge', category: 'Headwear', gender: 'Unisex', size: '56 cm', qty: 1 }
-                        ],
-                        timestamp: new Date(Date.now() - 3600000 * 24).toLocaleString(),
-                        status: 'Pending'
-                    }
-                ];
-                saveOrders();
-            }
-        }
-
-        // Older orders stored a single item directly on the order object
-        function normalizeOrder(o) {
-            if (Array.isArray(o.items)) return o;
-            const { itemTitle, category, gender, size, invId, ...rest } = o;
-            return { ...rest, items: [{ invId, title: itemTitle, category, gender, size, qty: 1 }] };
-        }
-
-        function saveInventory() {
-            localStorage.setItem('atc_inventory', JSON.stringify(inventory));
-            updateStats();
-        }
-
-        function saveOrders() {
-            localStorage.setItem('atc_orders', JSON.stringify(orders));
-            updateStats();
         }
 
         // NAVIGATION TABS
@@ -680,13 +576,11 @@
             if (tab === 'cadet') {
                 cadetPortal.classList.remove('hidden');
                 adminPortal.classList.add('hidden');
-
                 cadetBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-raf-gold text-raf-900 shadow";
                 adminBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 transition-all duration-200";
             } else {
                 cadetPortal.classList.add('hidden');
                 adminPortal.classList.remove('hidden');
-
                 adminBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-raf-gold text-raf-900 shadow";
                 cadetBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 transition-all duration-200";
             }
@@ -735,9 +629,7 @@
             const itemSelect = document.getElementById('item-selector');
             itemSelect.innerHTML = '<option value="" disabled selected>-- Select Uniform Item --</option>';
 
-            // Group inventory by garment title
             const titlesMap = new Map();
-
             inventory.forEach(item => {
                 const matchCategory = selectedCategory === 'All' || item.category === selectedCategory;
                 const matchGender = selectedGender === 'All' || item.gender === selectedGender || item.gender === 'Unisex';
@@ -756,7 +648,6 @@
                 itemSelect.appendChild(opt);
             });
 
-            // Reset sizes & summary
             document.getElementById('size-selector').innerHTML = '<option value="" disabled selected>First select an item above...</option>';
             document.getElementById('size-selector').disabled = true;
             resetSummary();
@@ -768,7 +659,6 @@
             sizeSelect.innerHTML = '<option value="" disabled selected>Select Available Size</option>';
             sizeSelect.disabled = false;
 
-            // Find all sizes for this title
             const availableItems = inventory.filter(i => i.title === selectedTitle && (selectedGender === 'All' || i.gender === selectedGender || i.gender === 'Unisex'));
 
             availableItems.forEach(item => {
@@ -873,9 +763,7 @@
         }
 
         function renderBasket() {
-            // Drop lines whose inventory entry has been removed
             basket = basket.filter(b => inventory.some(i => i.id === b.invId));
-
             const list = document.getElementById('basket-list');
             const totalUnits = basket.reduce((acc, b) => acc + b.qty, 0);
             document.getElementById('basket-count').innerText = `${totalUnits} item${totalUnits === 1 ? '' : 's'}`;
@@ -906,10 +794,9 @@
             });
         }
 
-        function submitReservation() {
+        async function submitReservation() {
             const cadetName = document.getElementById('cadet-name').value.trim();
             const cadetFlight = document.getElementById('cadet-flight').value;
-            const cadetId = '';
 
             if (!cadetName) {
                 showToast('Please enter cadet rank and full name.', 'error');
@@ -924,61 +811,42 @@
                 return;
             }
 
-            // Re-check stock for every line before committing
-            for (const line of basket) {
-                const item = inventory.find(i => i.id === line.invId);
-                if (!item || item.qty < line.qty) {
-                    showToast(`Sorry, ${item ? item.title + ' (' + item.size + ')' : 'an item'} no longer has enough stock.`, 'error');
+            try {
+                const res = await fetch('/api/orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'create', cadetName, flight: cadetFlight, basket })
+                });
+
+                const data = await res.json();
+                if (!res.ok || !data.success) {
+                    showToast(data.error || 'Failed to submit reservation.', 'error');
+                    await refreshData();
                     return;
                 }
+
+                // Show Confirmation Modal
+                document.getElementById('modal-ref-code').innerText = data.refCode;
+                document.getElementById('modal-cadet-name').innerText = `${cadetName} (${cadetFlight})`;
+                document.getElementById('modal-items-list').innerHTML = basket.map(b => {
+                    const item = inventory.find(i => i.id === b.invId);
+                    return `<li class="flex justify-between gap-3 text-xs"><span class="text-white">${b.qty} × ${item ? item.title : 'Item'}</span><span class="text-slate-400 text-right shrink-0">${item ? item.size : ''}</span></li>`;
+                }).join('');
+                
+                document.getElementById('success-modal').classList.remove('hidden');
+
+                basket = [];
+                renderBasket();
+                await refreshData();
+                if (document.getElementById('item-selector').value) handleItemChange();
+                showToast('Uniform order reserved successfully!', 'success');
+            } catch (err) {
+                showToast('Network error submitting order.', 'error');
             }
-
-            // Decrement Stock & build order lines
-            const orderItems = basket.map(line => {
-                const item = inventory.find(i => i.id === line.invId);
-                item.qty -= line.qty;
-                return { invId: item.id, title: item.title, category: item.category, gender: item.gender, size: item.size, qty: line.qty };
-            });
-            saveInventory();
-
-            // Create Order
-            const refCode = 'ATC-' + Math.floor(1000 + Math.random() * 9000);
-            const newOrder = {
-                id: refCode,
-                cadetName: cadetName,
-                flight: cadetFlight,
-                cadetId: cadetId || 'N/A',
-                items: orderItems,
-                timestamp: new Date().toLocaleString(),
-                status: 'Pending'
-            };
-
-            orders.unshift(newOrder);
-            saveOrders();
-
-            // Show Confirmation Modal
-            document.getElementById('modal-ref-code').innerText = refCode;
-            document.getElementById('modal-cadet-name').innerText = `${cadetName} (${cadetFlight})`;
-            document.getElementById('modal-items-list').innerHTML = orderItems.map(i => `
-                <li class="flex justify-between gap-3 text-xs">
-                    <span class="text-white">${i.qty} × ${i.title}</span>
-                    <span class="text-slate-400 text-right shrink-0">${i.size} [${i.gender}]</span>
-                </li>
-            `).join('');
-            document.getElementById('success-modal').classList.remove('hidden');
-
-            // Refresh UI
-            basket = [];
-            renderBasket();
-            if (document.getElementById('item-selector').value) handleItemChange();
-            renderOrdersTable();
-            renderInventoryTable();
-            showToast('Uniform order reserved successfully!', 'success');
         }
 
         function closeSuccessModal() {
             document.getElementById('success-modal').classList.add('hidden');
-            // Reset form fields
             document.getElementById('item-selector').value = '';
             document.getElementById('size-selector').value = '';
             document.getElementById('size-selector').disabled = true;
@@ -986,20 +854,33 @@
         }
 
         // STORES IC LOGIC
-        function unlockAdmin() {
+        async function unlockAdmin() {
             const pin = document.getElementById('admin-pin-input').value.trim();
-            if (Object.prototype.hasOwnProperty.call(ADMIN_ACCOUNTS, pin)) {
-                currentAdmin = ADMIN_ACCOUNTS[pin];
-                adminUnlocked = true;
-                applyAdminPermissions();
-                switchAdminTab('orders');
-                document.getElementById('admin-lock-screen').classList.add('hidden');
-                document.getElementById('admin-content').classList.remove('hidden');
-                document.getElementById('admin-badge').classList.remove('hidden');
-                showToast('Admin portal unlocked successfully.', 'success');
-            } else {
+            // Test PIN against a light inventory check or verify via test request
+            const res = await fetch('/api/inventory', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'adjust', pin, id: 'test', delta: 0 })
+            });
+
+            if (res.status === 401) {
                 showToast('Incorrect Security PIN code.', 'error');
+                return;
             }
+
+            currentAdminPIN = pin;
+            // Identify admin profile
+            if (pin === '9723') currentAdmin = { name: 'Full Admin', full: true };
+            else if (pin === '2060') currentAdmin = { name: 'Admin 1', full: false };
+            else currentAdmin = { name: 'Admin 2', full: false };
+
+            adminUnlocked = true;
+            applyAdminPermissions();
+            switchAdminTab('orders');
+            document.getElementById('admin-lock-screen').classList.add('hidden');
+            document.getElementById('admin-content').classList.remove('hidden');
+            document.getElementById('admin-badge').classList.remove('hidden');
+            showToast('Admin portal unlocked successfully.', 'success');
         }
 
         function applyAdminPermissions() {
@@ -1017,38 +898,9 @@
             return true;
         }
 
-        // Record actions made by the two restricted admins
-        function logActivity(action, details) {
-            if (!currentAdmin || currentAdmin.full) return;
-            activityLog.unshift({
-                time: new Date().toLocaleString(),
-                admin: currentAdmin.name,
-                action,
-                details
-            });
-            localStorage.setItem('atc_activity', JSON.stringify(activityLog));
-        }
-
-        function renderActivityLog() {
-            const tbody = document.getElementById('activity-table-body');
-            const filter = document.getElementById('activity-admin-filter').value;
-            const entries = activityLog.filter(e => filter === 'ALL' || e.admin === filter);
-            if (entries.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-slate-500">No admin activity recorded yet.</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = entries.map(e => `
-                <tr class="hover:bg-slate-800/40 transition">
-                    <td class="p-4 text-xs text-slate-400 whitespace-nowrap">${e.time}</td>
-                    <td class="p-4 font-bold text-white whitespace-nowrap">${e.admin}</td>
-                    <td class="p-4 text-xs font-semibold text-raf-gold whitespace-nowrap">${e.action}</td>
-                    <td class="p-4 text-slate-300">${e.details}</td>
-                </tr>
-            `).join('');
-        }
-
         function lockAdmin() {
             adminUnlocked = false;
+            currentAdminPIN = '';
             currentAdmin = null;
             applyAdminPermissions();
             switchAdminTab('orders');
@@ -1081,11 +933,10 @@
             const tbody = document.getElementById('orders-table-body');
             const query = document.getElementById('order-search').value.toLowerCase();
             const filterStatus = document.getElementById('order-status-filter').value;
-
             tbody.innerHTML = '';
 
             const filteredOrders = orders.filter(o => {
-                const matchQuery = o.cadetName.toLowerCase().includes(query) || o.id.toLowerCase().includes(query) || o.items.some(i => i.title.toLowerCase().includes(query));
+                const matchQuery = o.cadet_name.toLowerCase().includes(query) || o.id.toLowerCase().includes(query) || (o.items && o.items.some(i => i.title.toLowerCase().includes(query)));
                 const matchStatus = filterStatus === 'ALL' || o.status === filterStatus;
                 return matchQuery && matchStatus;
             });
@@ -1108,21 +959,21 @@
                 tr.innerHTML = `
                     <td class="p-4 font-mono font-bold text-raf-gold">${o.id}</td>
                     <td class="p-4">
-                        <div class="font-bold text-white">${o.cadetName}</div>
-                        <div class="text-xs text-slate-400">${o.flight} • ID: ${o.cadetId}</div>
+                        <div class="font-bold text-white">${o.cadet_name}</div>
+                        <div class="text-xs text-slate-400">${o.flight} • ID: ${o.cadet_id}</div>
                     </td>
                     <td class="p-4 space-y-2">
-                        ${o.items.map(i => `
+                        ${o.items ? o.items.map(i => `
                             <div>
                                 <div class="font-medium text-slate-200">${i.qty > 1 ? `<span class="text-raf-gold font-bold">${i.qty} ×</span> ` : ''}${i.title}</div>
                                 <div class="text-xs text-slate-400">${i.category}</div>
                             </div>
-                        `).join('')}
+                        `).join('') : ''}
                     </td>
                     <td class="p-4 text-xs font-semibold text-slate-300 space-y-2">
-                        ${o.items.map(i => `
+                        ${o.items ? o.items.map(i => `
                             <div class="leading-[2.5rem]">${i.size} <span class="text-slate-500">(${i.gender})</span></div>
-                        `).join('')}
+                        `).join('') : ''}
                     </td>
                     <td class="p-4 text-xs text-slate-400">${o.timestamp}</td>
                     <td class="p-4">${statusBadge}</td>
@@ -1138,29 +989,24 @@
             });
         }
 
-        function updateOrderStatus(orderId, newStatus) {
-            const order = orders.find(o => o.id === orderId);
-            if (!order) return;
-
-            const previousStatus = order.status;
-
-            // If cancelling, restore stock
-            if (newStatus === 'Cancelled' && order.status !== 'Cancelled') {
-                order.items.forEach(line => {
-                    const invItem = inventory.find(i => i.id === line.invId);
-                    if (invItem) invItem.qty += line.qty;
+        async function updateOrderStatus(orderId, newStatus) {
+            try {
+                const res = await fetch('/api/orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'updateStatus', orderId, newStatus, pin: currentAdminPIN })
                 });
-                saveInventory();
+                if (!res.ok) {
+                    showToast('Failed to update order status.', 'error');
+                    return;
+                }
+                await refreshData();
+                populateItemDropdown();
+                renderBasket();
+                showToast(`Order ${orderId} updated to ${newStatus}.`, 'success');
+            } catch (err) {
+                showToast('Network error updating order.', 'error');
             }
-
-            order.status = newStatus;
-            logActivity('Order status changed', `${orderId} (${order.cadetName}, ${order.flight}): ${previousStatus} → ${newStatus}`);
-            saveOrders();
-            renderOrdersTable();
-            renderInventoryTable();
-            populateItemDropdown();
-            renderBasket();
-            showToast(`Order ${orderId} updated to ${newStatus}.`, 'success');
         }
 
         function renderInventoryTable() {
@@ -1178,7 +1024,6 @@
             filteredInv.forEach(item => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-800/40 transition";
-
                 tr.innerHTML = `
                     <td class="p-4 font-bold text-white">${item.title}</td>
                     <td class="p-4 text-xs text-slate-300">${item.category}</td>
@@ -1201,31 +1046,45 @@
             });
         }
 
-        function adjustStock(invId, delta) {
-            const item = inventory.find(i => i.id === invId);
-            if (!item) return;
-
-            const oldQty = item.qty;
-            item.qty = Math.max(0, item.qty + delta);
-            if (item.qty !== oldQty) {
-                logActivity('Stock adjusted', `${item.title} (${item.size}, ${item.gender}): ${oldQty} → ${item.qty}`);
-            }
-            saveInventory();
-            renderInventoryTable();
-            populateItemDropdown();
-            renderBasket();
-        }
-
-        function deleteInventoryItem(invId) {
-            if (confirm('Are you sure you want to delete this item scale from inventory?')) {
-                const removed = inventory.find(i => i.id === invId);
-                if (removed) logActivity('Inventory item deleted', `${removed.title} (${removed.size}, ${removed.gender}) with ${removed.qty} in stock`);
-                inventory = inventory.filter(i => i.id !== invId);
-                saveInventory();
-                renderInventoryTable();
+        async function adjustStock(id, delta) {
+            try {
+                const res = await fetch('/api/inventory', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'adjust', id, delta, pin: currentAdminPIN })
+                });
+                if (!res.ok) {
+                    showToast('Failed to update stock.', 'error');
+                    return;
+                }
+                await refreshData();
                 populateItemDropdown();
                 renderBasket();
-                showToast('Inventory item removed.', 'success');
+            } catch (err) {
+                showToast('Network error adjusting stock.', 'error');
+            }
+        }
+
+        async function deleteInventoryItem(id) {
+            if (!requireFullAdmin()) return;
+            if (confirm('Are you sure you want to delete this item scale from inventory?')) {
+                try {
+                    const res = await fetch('/api/inventory', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'delete', id, pin: currentAdminPIN })
+                    });
+                    if (!res.ok) {
+                        showToast('Failed to delete item.', 'error');
+                        return;
+                    }
+                    await refreshData();
+                    populateItemDropdown();
+                    renderBasket();
+                    showToast('Inventory item removed.', 'success');
+                } catch (err) {
+                    showToast('Network error deleting item.', 'error');
+                }
             }
         }
 
@@ -1238,7 +1097,7 @@
             document.getElementById('add-item-modal').classList.add('hidden');
         }
 
-        function saveNewInventoryItem() {
+        async function saveNewInventoryItem() {
             if (!requireFullAdmin()) return;
             const title = document.getElementById('new-item-title').value.trim();
             const category = document.getElementById('new-item-category').value;
@@ -1260,35 +1119,71 @@
                 qty
             };
 
-            inventory.push(newItem);
-            saveInventory();
-            renderInventoryTable();
-            populateItemDropdown();
-            renderBasket();
-            closeAddItemModal();
-            showToast('New stock item added to stores!', 'success');
+            try {
+                const res = await fetch('/api/inventory', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'add', newItem, pin: currentAdminPIN })
+                });
+                if (!res.ok) {
+                    showToast('Failed to add new item.', 'error');
+                    return;
+                }
+                await refreshData();
+                populateItemDropdown();
+                renderBasket();
+                closeAddItemModal();
+                showToast('New stock item added to stores!', 'success');
+            } catch (err) {
+                showToast('Network error saving item.', 'error');
+            }
         }
 
-        function confirmResetData() {
+        async function confirmResetData() {
             if (!requireFullAdmin()) return;
             const pin = prompt('Enter the admin PIN code to confirm reset.\n\nWARNING: This permanently removes ALL uniform entries and ALL current orders.');
             if (pin === null) return;
-            if (pin !== '9723') {
+            if (pin !== currentAdminPIN) {
                 showToast('Incorrect Security PIN code. Reset cancelled.', 'error');
                 return;
             }
             if (!confirm('Are you sure? Every uniform entry and order will be deleted and all counts set to 0.')) return;
 
-            inventory = [];
-            orders = [];
-            saveInventory();
-            saveOrders();
-            renderInventoryTable();
-            renderOrdersTable();
-            populateItemDropdown();
-            renderBasket();
-            updateStats();
-            showToast('All uniform entries and orders have been cleared.', 'success');
+            try {
+                const res = await fetch('/api/inventory', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'reset', pin: currentAdminPIN })
+                });
+                if (!res.ok) {
+                    showToast('Reset failed.', 'error');
+                    return;
+                }
+                await refreshData();
+                populateItemDropdown();
+                renderBasket();
+                showToast('All uniform entries and orders have been cleared.', 'success');
+            } catch (err) {
+                showToast('Network error performing reset.', 'error');
+            }
+        }
+
+        function renderActivityLog() {
+            const tbody = document.getElementById('activity-table-body');
+            const filter = document.getElementById('activity-admin-filter').value;
+            const entries = activityLog.filter(e => filter === 'ALL' || e.admin_name === filter);
+            if (entries.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-slate-500">No admin activity recorded yet.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = entries.map(e => `
+                <tr class="hover:bg-slate-800/40 transition">
+                    <td class="p-4 text-xs text-slate-400 whitespace-nowrap">${e.time}</td>
+                    <td class="p-4 font-bold text-white whitespace-nowrap">${e.admin_name}</td>
+                    <td class="p-4 text-xs font-semibold text-raf-gold whitespace-nowrap">${e.action}</td>
+                    <td class="p-4 text-slate-300">${e.details}</td>
+                </tr>
+            `).join('');
         }
 
         function updateStats() {
@@ -1303,11 +1198,9 @@
             document.getElementById('stat-low-stock').innerText = lowStockCount;
         }
 
-        // TOAST NOTIFICATIONS
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            
             const bgColor = type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-rose-600' : 'bg-raf-gold text-raf-900';
             const icon = type === 'success' ? 'fa-circle-check' : type === 'error' ? 'fa-triangle-exclamation' : 'fa-circle-info';
 
@@ -1315,11 +1208,7 @@
             toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
 
             container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.classList.remove('translate-y-2', 'opacity-0');
-            }, 10);
-
+            setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'translate-y-2');
                 setTimeout(() => toast.remove(), 300);
