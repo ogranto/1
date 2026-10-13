@@ -3,7 +3,7 @@ compatibility_date = "2026-10-13"
 main = "src/index.js"
 
 [assets]
-directory = "."
+directory = "./site"
 binding = "ASSETS"
 
 [[d1_databases]]
