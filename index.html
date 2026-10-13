@@ -398,12 +398,12 @@
                         <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div>
                                 <h3 class="text-lg font-bold text-white">Admin Activity Log</h3>
-                                <p class="text-xs text-slate-400">Everything Admin 1 and Admin 2 have done, newest first.</p>
+                                <p class="text-xs text-slate-400">Everything  and Sam Birthwright have done, newest first.</p>
                             </div>
                             <select id="activity-admin-filter" onchange="renderActivityLog()" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-raf-gold">
                                 <option value="ALL">All Admins</option>
-                                <option value="Admin 1">Admin 1</option>
-                                <option value="Admin 2">Admin 2</option>
+                                <option value=""></option>
+                                <option value="Sam Birthwright">Sam Birthwright</option>
                             </select>
                         </div>
                         <div class="overflow-x-auto rounded-xl border border-slate-700/80">
@@ -871,8 +871,8 @@
             currentAdminPIN = pin;
             // Identify admin profile
             if (pin === '9723') currentAdmin = { name: 'Full Admin', full: true };
-            else if (pin === '2060') currentAdmin = { name: 'Admin 1', full: false };
-            else currentAdmin = { name: 'Admin 2', full: false };
+            else if (pin === '2060') currentAdmin = { name: '', full: false };
+            else currentAdmin = { name: 'Sam Birthwright', full: false };
 
             adminUnlocked = true;
             applyAdminPermissions();
