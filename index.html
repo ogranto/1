@@ -63,9 +63,9 @@
                         <i class="fa-solid fa-user-graduate"></i>
                         <span>Cadet Reservation</span>
                     </button>
-                    <button id="nav-admin-btn" onclick="switchTab('admin')" class="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 transition-all duration-200">
+                    <button id="nav-admin-btn" onclick="switchTab('admin')" class="hidden flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-700/50 transition-all duration-200">
                         <i class="fa-solid fa-user-shield"></i>
-                        <span>Storekeeper Admin</span>
+                        <span>Stores IC</span>
                         <span id="admin-badge" class="hidden bg-emerald-500 text-slate-950 text-[10px] px-1.5 py-0.5 rounded-full font-bold">UNLOCKED</span>
                     </button>
                 </nav>
@@ -178,6 +178,12 @@
                                 <option value="" disabled selected>First select an item above...</option>
                             </select>
                         </div>
+
+                        <!-- Add to Order Button -->
+                        <button id="add-to-order-btn" type="button" onclick="addToOrder()" disabled class="w-full py-3 px-4 rounded-xl font-semibold text-sm border border-raf-gold text-raf-gold bg-raf-gold/10 hover:bg-raf-gold hover:text-raf-900 disabled:border-slate-700 disabled:text-slate-500 disabled:bg-slate-900 disabled:cursor-not-allowed transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-cart-plus"></i>
+                            <span>Add Item to Order</span>
+                        </button>
                     </div>
                 </div>
 
@@ -216,6 +222,15 @@
                             </div>
                         </div>
 
+                        <!-- Order Basket -->
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Items in this Order</span>
+                                <span id="basket-count" class="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-900 text-slate-400 border border-slate-700">0 items</span>
+                            </div>
+                            <ul id="basket-list" class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar"></ul>
+                        </div>
+
                         <!-- Pickup Notice & Terms -->
                         <div class="bg-raf-900/60 rounded-xl p-4 border border-raf-800 text-xs text-slate-300 space-y-2">
                             <div class="flex items-center gap-2 font-semibold text-white">
@@ -245,7 +260,7 @@
                     <i class="fa-solid fa-lock"></i>
                 </div>
                 <div>
-                    <h3 class="text-2xl font-extrabold text-white">Storekeeper Access</h3>
+                    <h3 class="text-2xl font-extrabold text-white">Stores IC Access</h3>
                     <p class="text-slate-400 text-sm mt-1">Enter PIN code to manage uniform orders and stock levels.</p>
                 </div>
                 <div class="space-y-3">
@@ -406,7 +421,7 @@
             </div>
             
             <div class="text-center space-y-2">
-                <h3 class="text-2xl font-bold text-white">Uniform Reserved Successfully!</h3>
+                <h3 class="text-2xl font-bold text-white">Uniform Order Reserved Successfully!</h3>
                 <p class="text-slate-300 text-sm">Your order has been logged with the Squadron Storekeeper.</p>
             </div>
 
@@ -420,13 +435,9 @@
                     <span class="text-slate-400">Cadet:</span>
                     <span id="modal-cadet-name" class="text-white">--</span>
                 </div>
-                <div class="flex justify-between">
-                    <span class="text-slate-400">Item:</span>
-                    <span id="modal-item-title" class="text-white">--</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-slate-400">Size & Fit:</span>
-                    <span id="modal-item-size" class="text-white">--</span>
+                <div>
+                    <span class="text-slate-400">Items:</span>
+                    <ul id="modal-items-list" class="mt-2 space-y-1.5"></ul>
                 </div>
                 <div class="flex justify-between border-t border-slate-800 pt-2 text-xs">
                     <span class="text-slate-400">Cost:</span>
@@ -440,7 +451,7 @@
             </div>
 
             <button onclick="closeSuccessModal()" class="w-full py-3.5 bg-raf-gold hover:bg-raf-gold-hover text-raf-900 font-bold rounded-xl transition shadow-lg">
-                Done / Reserve Another Item
+                Done / Start Another Order
             </button>
         </div>
     </div>
@@ -551,15 +562,23 @@
         let selectedCategory = 'All';
         let selectedGender = 'All';
         let adminUnlocked = false;
+        let basket = [];
 
         // Initialize App on DOM Load
         window.addEventListener('DOMContentLoaded', () => {
             loadStoredData();
             renderCategoryPills();
             populateItemDropdown();
+            renderBasket();
             renderOrdersTable();
             renderInventoryTable();
             updateStats();
+            if (location.hash === '#admin') switchTab('admin');
+        });
+
+        // Stores IC page is reached via the #admin URL (nav button is hidden)
+        window.addEventListener('hashchange', () => {
+            switchTab(location.hash === '#admin' ? 'admin' : 'cadet');
         });
 
         // Load or Initialize Data
@@ -575,7 +594,7 @@
             }
 
             if (savedOrders) {
-                orders = JSON.parse(savedOrders);
+                orders = JSON.parse(savedOrders).map(normalizeOrder);
             } else {
                 orders = [
                     {
@@ -583,17 +602,22 @@
                         cadetName: 'Cdt Davies, M.',
                         flight: 'Alpha Flight',
                         cadetId: '301982',
-                        itemTitle: 'Air Cadet Beret & Badge',
-                        category: 'Headwear',
-                        gender: 'Unisex',
-                        size: '56 cm',
-                        invId: 'inv-2',
+                        items: [
+                            { invId: 'inv-2', title: 'Air Cadet Beret & Badge', category: 'Headwear', gender: 'Unisex', size: '56 cm', qty: 1 }
+                        ],
                         timestamp: new Date(Date.now() - 3600000 * 24).toLocaleString(),
                         status: 'Pending'
                     }
                 ];
                 saveOrders();
             }
+        }
+
+        // Older orders stored a single item directly on the order object
+        function normalizeOrder(o) {
+            if (Array.isArray(o.items)) return o;
+            const { itemTitle, category, gender, size, invId, ...rest } = o;
+            return { ...rest, items: [{ invId, title: itemTitle, category, gender, size, qty: 1 }] };
         }
 
         function saveInventory() {
@@ -721,7 +745,7 @@
 
         function handleSizeChange() {
             const invId = document.getElementById('size-selector').value;
-            const reserveBtn = document.getElementById('reserve-btn');
+            const addBtn = document.getElementById('add-to-order-btn');
 
             if (!invId) {
                 resetSummary();
@@ -735,21 +759,22 @@
             document.getElementById('summary-title').innerText = item.title;
             document.getElementById('summary-gender').innerText = `Fit: ${item.gender}`;
             document.getElementById('summary-size').innerText = item.size;
+            const available = item.qty - basketQty(item.id);
             document.getElementById('summary-stock-count').innerText = `${item.qty} units available`;
 
             const badge = document.getElementById('stock-badge');
             if (item.qty > 3) {
                 badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
                 badge.innerText = "In Stock";
-                reserveBtn.disabled = false;
+                addBtn.disabled = available <= 0;
             } else if (item.qty > 0) {
                 badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30";
                 badge.innerText = "Low Stock";
-                reserveBtn.disabled = false;
+                addBtn.disabled = available <= 0;
             } else {
                 badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30";
                 badge.innerText = "Out of Stock";
-                reserveBtn.disabled = true;
+                addBtn.disabled = true;
             }
         }
 
@@ -761,14 +786,91 @@
             document.getElementById('summary-stock-count').innerText = '--';
             document.getElementById('stock-badge').className = "px-3 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-400 border border-slate-700";
             document.getElementById('stock-badge').innerText = '--';
-            document.getElementById('reserve-btn').disabled = true;
+            document.getElementById('add-to-order-btn').disabled = true;
+        }
+
+        // ORDER BASKET
+        function basketQty(invId) {
+            const line = basket.find(b => b.invId === invId);
+            return line ? line.qty : 0;
+        }
+
+        function addToOrder() {
+            const invId = document.getElementById('size-selector').value;
+            if (!invId) {
+                showToast('Please select a valid uniform item and size.', 'error');
+                return;
+            }
+
+            const item = inventory.find(i => i.id === invId);
+            if (!item || item.qty - basketQty(invId) <= 0) {
+                showToast('No more stock available for this item and size.', 'error');
+                return;
+            }
+
+            const line = basket.find(b => b.invId === invId);
+            if (line) line.qty += 1;
+            else basket.push({ invId, qty: 1 });
+
+            renderBasket();
+            handleSizeChange();
+            showToast(`${item.title} (${item.size}) added to order.`, 'success');
+        }
+
+        function changeBasketQty(invId, delta) {
+            const line = basket.find(b => b.invId === invId);
+            if (!line) return;
+            const item = inventory.find(i => i.id === invId);
+
+            if (delta > 0 && (!item || line.qty >= item.qty)) {
+                showToast('No more stock available for this item and size.', 'error');
+                return;
+            }
+
+            line.qty += delta;
+            if (line.qty <= 0) basket = basket.filter(b => b.invId !== invId);
+            renderBasket();
+            handleSizeChange();
+        }
+
+        function renderBasket() {
+            // Drop lines whose inventory entry has been removed
+            basket = basket.filter(b => inventory.some(i => i.id === b.invId));
+
+            const list = document.getElementById('basket-list');
+            const totalUnits = basket.reduce((acc, b) => acc + b.qty, 0);
+            document.getElementById('basket-count').innerText = `${totalUnits} item${totalUnits === 1 ? '' : 's'}`;
+            document.getElementById('reserve-btn').disabled = basket.length === 0;
+
+            if (basket.length === 0) {
+                list.innerHTML = `<li class="text-xs text-slate-500 text-center py-4 border border-dashed border-slate-700 rounded-xl">No items added yet. Choose an item and size, then click "Add Item to Order".</li>`;
+                return;
+            }
+
+            list.innerHTML = '';
+            basket.forEach(line => {
+                const item = inventory.find(i => i.id === line.invId);
+                const li = document.createElement('li');
+                li.className = "flex items-center justify-between gap-3 bg-slate-900/80 rounded-xl px-3 py-2.5 border border-slate-700";
+                li.innerHTML = `
+                    <div class="min-w-0">
+                        <div class="text-sm font-semibold text-white truncate">${item.title}</div>
+                        <div class="text-xs text-slate-400">${item.size} • ${item.gender}</div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button type="button" onclick="changeBasketQty('${line.invId}', -1)" title="Remove one" class="w-6 h-6 rounded-md bg-slate-700 hover:bg-rose-600 text-white text-xs font-bold transition flex items-center justify-center">${line.qty === 1 ? '<i class="fa-solid fa-trash-can text-[10px]"></i>' : '-'}</button>
+                        <span class="w-6 text-center text-sm font-bold font-mono text-raf-gold">${line.qty}</span>
+                        <button type="button" onclick="changeBasketQty('${line.invId}', 1)" title="Add one" class="w-6 h-6 rounded-md bg-slate-700 hover:bg-emerald-600 text-white text-xs font-bold transition flex items-center justify-center">+</button>
+                    </div>
+                `;
+                list.appendChild(li);
+            });
         }
 
         function submitReservation() {
             const cadetName = document.getElementById('cadet-name').value.trim();
             const cadetFlight = document.getElementById('cadet-flight').value;
             const cadetId = document.getElementById('cadet-id').value.trim();
-            const invId = document.getElementById('size-selector').value;
 
             if (!cadetName) {
                 showToast('Please enter cadet rank and full name.', 'error');
@@ -778,19 +880,26 @@
                 showToast('Please select cadet flight.', 'error');
                 return;
             }
-            if (!invId) {
-                showToast('Please select a valid uniform item and size.', 'error');
+            if (basket.length === 0) {
+                showToast('Please add at least one uniform item to the order.', 'error');
                 return;
             }
 
-            const item = inventory.find(i => i.id === invId);
-            if (!item || item.qty <= 0) {
-                showToast('Sorry, this item is currently out of stock.', 'error');
-                return;
+            // Re-check stock for every line before committing
+            for (const line of basket) {
+                const item = inventory.find(i => i.id === line.invId);
+                if (!item || item.qty < line.qty) {
+                    showToast(`Sorry, ${item ? item.title + ' (' + item.size + ')' : 'an item'} no longer has enough stock.`, 'error');
+                    return;
+                }
             }
 
-            // Decrement Stock
-            item.qty -= 1;
+            // Decrement Stock & build order lines
+            const orderItems = basket.map(line => {
+                const item = inventory.find(i => i.id === line.invId);
+                item.qty -= line.qty;
+                return { invId: item.id, title: item.title, category: item.category, gender: item.gender, size: item.size, qty: line.qty };
+            });
             saveInventory();
 
             // Create Order
@@ -800,11 +909,7 @@
                 cadetName: cadetName,
                 flight: cadetFlight,
                 cadetId: cadetId || 'N/A',
-                itemTitle: item.title,
-                category: item.category,
-                gender: item.gender,
-                size: item.size,
-                invId: item.id,
+                items: orderItems,
                 timestamp: new Date().toLocaleString(),
                 status: 'Pending'
             };
@@ -815,15 +920,21 @@
             // Show Confirmation Modal
             document.getElementById('modal-ref-code').innerText = refCode;
             document.getElementById('modal-cadet-name').innerText = `${cadetName} (${cadetFlight})`;
-            document.getElementById('modal-item-title').innerText = item.title;
-            document.getElementById('modal-item-size').innerText = `${item.size} [${item.gender}]`;
+            document.getElementById('modal-items-list').innerHTML = orderItems.map(i => `
+                <li class="flex justify-between gap-3 text-xs">
+                    <span class="text-white">${i.qty} × ${i.title}</span>
+                    <span class="text-slate-400 text-right shrink-0">${i.size} [${i.gender}]</span>
+                </li>
+            `).join('');
             document.getElementById('success-modal').classList.remove('hidden');
 
             // Refresh UI
-            handleSizeChange();
+            basket = [];
+            renderBasket();
+            if (document.getElementById('item-selector').value) handleItemChange();
             renderOrdersTable();
             renderInventoryTable();
-            showToast('Uniform item reserved successfully!', 'success');
+            showToast('Uniform order reserved successfully!', 'success');
         }
 
         function closeSuccessModal() {
@@ -835,7 +946,7 @@
             resetSummary();
         }
 
-        // STOREKEEPER ADMIN LOGIC
+        // STORES IC LOGIC
         function unlockAdmin() {
             const pin = document.getElementById('admin-pin-input').value;
             if (pin === '9723') {
@@ -885,7 +996,7 @@
             tbody.innerHTML = '';
 
             const filteredOrders = orders.filter(o => {
-                const matchQuery = o.cadetName.toLowerCase().includes(query) || o.id.toLowerCase().includes(query) || o.itemTitle.toLowerCase().includes(query);
+                const matchQuery = o.cadetName.toLowerCase().includes(query) || o.id.toLowerCase().includes(query) || o.items.some(i => i.title.toLowerCase().includes(query));
                 const matchStatus = filterStatus === 'ALL' || o.status === filterStatus;
                 return matchQuery && matchStatus;
             });
@@ -911,12 +1022,18 @@
                         <div class="font-bold text-white">${o.cadetName}</div>
                         <div class="text-xs text-slate-400">${o.flight} • ID: ${o.cadetId}</div>
                     </td>
-                    <td class="p-4">
-                        <div class="font-medium text-slate-200">${o.itemTitle}</div>
-                        <div class="text-xs text-slate-400">${o.category}</div>
+                    <td class="p-4 space-y-2">
+                        ${o.items.map(i => `
+                            <div>
+                                <div class="font-medium text-slate-200">${i.qty > 1 ? `<span class="text-raf-gold font-bold">${i.qty} ×</span> ` : ''}${i.title}</div>
+                                <div class="text-xs text-slate-400">${i.category}</div>
+                            </div>
+                        `).join('')}
                     </td>
-                    <td class="p-4 text-xs font-semibold text-slate-300">
-                        ${o.size} <span class="text-slate-500">(${o.gender})</span>
+                    <td class="p-4 text-xs font-semibold text-slate-300 space-y-2">
+                        ${o.items.map(i => `
+                            <div class="leading-[2.5rem]">${i.size} <span class="text-slate-500">(${i.gender})</span></div>
+                        `).join('')}
                     </td>
                     <td class="p-4 text-xs text-slate-400">${o.timestamp}</td>
                     <td class="p-4">${statusBadge}</td>
@@ -938,11 +1055,11 @@
 
             // If cancelling, restore stock
             if (newStatus === 'Cancelled' && order.status !== 'Cancelled') {
-                const invItem = inventory.find(i => i.id === order.invId);
-                if (invItem) {
-                    invItem.qty += 1;
-                    saveInventory();
-                }
+                order.items.forEach(line => {
+                    const invItem = inventory.find(i => i.id === line.invId);
+                    if (invItem) invItem.qty += line.qty;
+                });
+                saveInventory();
             }
 
             order.status = newStatus;
@@ -950,6 +1067,7 @@
             renderOrdersTable();
             renderInventoryTable();
             populateItemDropdown();
+            renderBasket();
             showToast(`Order ${orderId} updated to ${newStatus}.`, 'success');
         }
 
@@ -999,6 +1117,7 @@
             saveInventory();
             renderInventoryTable();
             populateItemDropdown();
+            renderBasket();
         }
 
         function deleteInventoryItem(invId) {
@@ -1007,6 +1126,7 @@
                 saveInventory();
                 renderInventoryTable();
                 populateItemDropdown();
+                renderBasket();
                 showToast('Inventory item removed.', 'success');
             }
         }
@@ -1044,6 +1164,7 @@
             saveInventory();
             renderInventoryTable();
             populateItemDropdown();
+            renderBasket();
             closeAddItemModal();
             showToast('New stock item added to stores!', 'success');
         }
@@ -1064,6 +1185,7 @@
             renderInventoryTable();
             renderOrdersTable();
             populateItemDropdown();
+            renderBasket();
             updateStats();
             showToast('All uniform entries and orders have been cleared.', 'success');
         }
