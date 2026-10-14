@@ -45,7 +45,7 @@ export async function onRequest(context) {
 
         if (action === "updateStatus") {
             const { orderId, newStatus, pin } = body;
-            const admin = verifyAdmin(pin, env);
+            const admin = await verifyAdmin(pin, env);
             if (!admin) return new Response("Unauthorized", { status: 401 });
 
             const order = await env.DB.prepare("SELECT * FROM orders WHERE id = ?").bind(orderId).first();
