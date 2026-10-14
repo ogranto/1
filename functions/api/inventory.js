@@ -12,7 +12,7 @@ export async function onRequest(context) {
         const { action, id, delta, pin, newItem } = body;
 
         // Check Admin PIN for modifications
-        const admin = verifyAdmin(pin, env);
+        const admin = await verifyAdmin(pin, env);
         if (!admin) return new Response("Unauthorized", { status: 401 });
 
         if (action === "adjust") {
