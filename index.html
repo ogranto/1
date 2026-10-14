@@ -1237,6 +1237,54 @@
             document.getElementById('stat-low-stock').innerText = lowStockCount;
         }
 
+        function openChangePinModal() {
+    document.getElementById('cp-current').value = '';
+    document.getElementById('cp-new').value = '';
+    document.getElementById('cp-confirm').value = '';
+    document.getElementById('change-pin-modal').classList.remove('hidden');
+}
+
+function closeChangePinModal() {
+    document.getElementById('change-pin-modal').classList.add('hidden');
+}
+
+async function saveNewPin() {
+    const current = document.getElementById('cp-current').value.trim();
+    const newPin = document.getElementById('cp-new').value.trim();
+    const confirmPin = document.getElementById('cp-confirm').value.trim();
+
+    if (current !== currentAdminPIN) {
+        showToast('Current PIN is incorrect.', 'error');
+        return;
+    }
+    if (!/^\d{4,8}$/.test(newPin)) {
+        showToast('New PIN must be 4 to 8 digits.', 'error');
+        return;
+    }
+    if (newPin !== confirmPin) {
+        showToast('New PINs do not match.', 'error');
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/admin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'changePin', pin: currentAdminPIN, newPin })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.success) {
+            showToast(data.error || 'Failed to change PIN.', 'error');
+            return;
+        }
+        currentAdminPIN = newPin;
+        closeChangePinModal();
+        await refreshData();
+        showToast('Your PIN has been changed.', 'success');
+    } catch (err) {
+        showToast('Network error changing PIN.', 'error');
+    }
+}
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
