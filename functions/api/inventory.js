@@ -56,11 +56,24 @@ export async function onRequest(context) {
     return new Response("Method not allowed", { status: 405 });
 }
 
-function verifyAdmin(pin, env) {
-    if (pin && pin === env.PIN_OSCAR_GRANT) return { name: 'Oscar Grant', full: true };
-    if (pin && pin === env.PIN_TILLY_BRITTON) return { name: 'Tilly Britton', full: false };
-    if (pin && pin === env.PIN_SAM_BIRTHWRIGHT) return { name: 'Sam Birthwright', full: false };
-    return null;
+async function getAdmins(env) {
+    await env.DB.prepare("CREATE TABLE IF NOT EXISTS admin_pins (admin_key TEXT PRIMARY KEY, pin TEXT NOT NULL)").run();
+    const { results } = await env.DB.prepare("SELECT admin_key, pin FROM admin_pins").all();
+    const saved = {};
+    results.forEach(r => { saved[r.admin_key] = r.pin; });
+    const admins = [
+        { key: 'oscar', name: 'Oscar Grant', full: true, envPin: env.PIN_OSCAR_GRANT },
+        { key: 'tilly', name: 'Tilly Britton', full: false, envPin: env.PIN_TILLY_BRITTON },
+        { key: 'sam', name: 'Sam Birthwright', full: false, envPin: env.PIN_SAM_BIRTHWRIGHT }
+    ];
+    return admins.map(a => ({ key: a.key, name: a.name, full: a.full, pin: String(saved[a.key] || a.envPin || '') }));
+}
+
+async function verifyAdmin(pin, env) {
+    if (!pin) return null;
+    const admins = await getAdmins(env);
+    const match = admins.find(a => a.pin && a.pin === String(pin));
+    return match ? { key: match.key, name: match.name, full: match.full } : null;
 }
 
 async function logActivity(env, adminName, action, details) {
