@@ -894,34 +894,33 @@
 
         // STORES IC LOGIC
         async function unlockAdmin() {
-            const pin = document.getElementById('admin-pin-input').value.trim();
-            // Test PIN against a light inventory check or verify via test request
-            const res = await fetch('/api/inventory', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'adjust', pin, id: 'test', delta: 0 })
-            });
-
-            if (res.status === 401) {
-                showToast('Incorrect Security PIN code.', 'error');
-                return;
-            }
-
-            currentAdminPIN = pin;
-            // Identify admin profile
-            if (pin === '9723') currentAdmin = { name: 'Oscar Grant', full: true };
-            else if (pin === '2060') currentAdmin = { name: 'Tilly Britton', full: false };
-            else currentAdmin = { name: 'Sam Birthwright', full: false };
-
-            adminUnlocked = true;
-            document.getElementById('admin-welcome-text').textContent = `Welcome, ${currentAdmin.name}`;
-            applyAdminPermissions();
-            switchAdminTab('orders');
-            document.getElementById('admin-lock-screen').classList.add('hidden');
-            document.getElementById('admin-content').classList.remove('hidden');
-            document.getElementById('admin-badge').classList.remove('hidden');
-            showToast('Admin portal unlocked successfully.', 'success');
+    const pin = document.getElementById('admin-pin-input').value.trim();
+    try {
+        const res = await fetch('/api/admin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'login', pin })
+        });
+        if (!res.ok) {
+            showToast('Incorrect Security PIN code.', 'error');
+            return;
         }
+        const data = await res.json();
+        currentAdminPIN = pin;
+        currentAdmin = { name: data.name, full: data.full };
+
+        adminUnlocked = true;
+        document.getElementById('admin-welcome-text').textContent = `Welcome, ${currentAdmin.name}`;
+        applyAdminPermissions();
+        switchAdminTab('orders');
+        document.getElementById('admin-lock-screen').classList.add('hidden');
+        document.getElementById('admin-content').classList.remove('hidden');
+        document.getElementById('admin-badge').classList.remove('hidden');
+        showToast('Admin portal unlocked successfully.', 'success');
+    } catch (err) {
+        showToast('Network error. Please try again.', 'error');
+    }
+}
 
         function applyAdminPermissions() {
             const isFull = !!(currentAdmin && currentAdmin.full);
