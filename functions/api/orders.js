@@ -49,6 +49,48 @@ orders.forEach(o => {
             return Response.json({ success: true, refCode });
         }
 
+        if (action === "returnItems") {
+    const { orderId, pin, returns } = body;
+    const admin = await verifyAdmin(pin, env);
+    if (!admin) return new Response("Unauthorized", { status: 401 });
+
+    const order = await env.DB.prepare("SELECT * FROM orders WHERE id = ?").bind(orderId).first();
+    if (!order) return new Response("Order not found", { status: 404 });
+    if (order.status !== 'Fulfilled') {
+        return Response.json({ success: false, error: "Only issued orders can have items returned." }, { status: 400 });
+    }
+
+    await env.DB.prepare("CREATE TABLE IF NOT EXISTS order_returns (id INTEGER PRIMARY KEY AUTOINCREMENT, order_id TEXT NOT NULL, inv_id TEXT NOT NULL, qty INTEGER NOT NULL, time TEXT NOT NULL, admin_name TEXT NOT NULL)").run();
+    const { results: items } = await env.DB.prepare("SELECT * FROM order_items WHERE order_id = ?").bind(orderId).all();
+    const { results: done } = await env.DB.prepare("SELECT inv_id, SUM(qty) AS qty FROM order_returns WHERE order_id = ? GROUP BY inv_id").bind(orderId).all();
+
+    // Check everything first, then save
+    const valid = [];
+    for (const r of (returns || [])) {
+        const line = items.find(i => i.inv_id === r.invId);
+        const qty = parseInt(r.qty);
+        if (!line || !(qty > 0)) continue;
+        const already = (done.find(d => d.inv_id === r.invId) || { qty: 0 }).qty;
+        if (qty > line.qty - already) {
+            return Response.json({ success: false, error: `Too many ${line.title} marked as returned.` }, { status: 400 });
+        }
+        valid.push({ line, qty });
+    }
+    if (valid.length === 0) {
+        return Response.json({ success: false, error: "Nothing selected to return." }, { status: 400 });
+    }
+
+    const time = new Date().toLocaleString();
+    for (const { line, qty } of valid) {
+        await env.DB.prepare("INSERT INTO order_returns (order_id, inv_id, qty, time, admin_name) VALUES (?, ?, ?, ?, ?)")
+            .bind(orderId, line.inv_id, qty, time, admin.name).run();
+        await env.DB.prepare("UPDATE inventory SET qty = qty + ? WHERE id = ?").bind(qty, line.inv_id).run();
+    }
+
+    const summary = valid.map(v => `${v.qty} × ${v.line.title} (${v.line.size})`).join(', ');
+    await logActivity(env, admin.name, "Items returned", `${orderId} (${order.cadet_name}): ${summary}`);
+    return Response.json({ success: true });
+}
         if (action === "updateStatus") {
             const { orderId, newStatus, pin } = body;
             const admin = await verifyAdmin(pin, env);
