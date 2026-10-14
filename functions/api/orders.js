@@ -68,9 +68,9 @@ export async function onRequest(context) {
 }
 
 function verifyAdmin(pin, env) {
-    if (pin === env.PIN_FULL_ADMIN) return { name: 'Full Admin', full: true };
-    if (pin === env.PIN_ADMIN_1) return { name: 'Admin 1', full: false };
-    if (pin === env.PIN_ADMIN_2) return { name: 'Admin 2', full: false };
+    if (pin && pin === env.PIN_OSCAR_GRANT) return { name: 'Oscar Grant', full: true };
+    if (pin && pin === env.PIN_TILLY_BRITTON) return { name: 'Tilly Britton', full: false };
+    if (pin && pin === env.PIN_SAM_BIRTHWRIGHT) return { name: 'Sam Birthwright', full: false };
     return null;
 }
 
