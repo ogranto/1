@@ -879,6 +879,7 @@
             else currentAdmin = { name: 'Sam Birthwright', full: false };
 
             adminUnlocked = true;
+            document.getElementById('admin-welcome-text').textContent = `Welcome, ${currentAdmin.name}`;
             applyAdminPermissions();
             switchAdminTab('orders');
             document.getElementById('admin-lock-screen').classList.add('hidden');
