@@ -5,9 +5,15 @@ export async function onRequest(context) {
         const { results: orders } = await env.DB.prepare("SELECT * FROM orders ORDER BY timestamp DESC").all();
         const { results: items } = await env.DB.prepare("SELECT * FROM order_items").all();
         
-        orders.forEach(o => {
-            o.items = items.filter(i => i.order_id === o.id);
-        });
+        await env.DB.prepare("CREATE TABLE IF NOT EXISTS order_returns (id INTEGER PRIMARY KEY AUTOINCREMENT, order_id TEXT NOT NULL, inv_id TEXT NOT NULL, qty INTEGER NOT NULL, time TEXT NOT NULL, admin_name TEXT NOT NULL)").run();
+const { results: returned } = await env.DB.prepare("SELECT order_id, inv_id, SUM(qty) AS qty FROM order_returns GROUP BY order_id, inv_id").all();
+
+orders.forEach(o => {
+    o.items = items.filter(i => i.order_id === o.id).map(i => {
+        const r = returned.find(x => x.order_id === o.id && x.inv_id === i.inv_id);
+        return { ...i, returned: r ? r.qty : 0 };
+    });
+});
         return Response.json(orders);
     }
 
